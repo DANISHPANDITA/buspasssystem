@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { useSelector } from "react-redux";
 import { SelectFare, SelectRoute, SelectPassengers } from "./app/counterSlice";
 import "./BOOKTICKET.css";
@@ -37,8 +38,9 @@ function BOOKTICKET() {
           }))
         )
       );
-  }, []);
-  setTotalFare(fare.fare * passengers);
+    setTotalFare(fare.fare * passengers);
+  }, [fare, passengers]);
+
   function searchSameRouteBuses(Array, String) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].busData.route === String) {
@@ -59,30 +61,34 @@ function BOOKTICKET() {
   }
   if (sameRouteBuses) {
     return (
-      <div className="bookTicketPage">
-        <center>
-          <h1 className="refreshTitle">Refresh to see seat status. </h1>
-          <div className="header">
-            <div className="statusByColour">
-              <div className="seatShow">
-                <div className="greenBox"></div>
-                <p className="seatStatusName">Empty Seat</p>
+      <ErrorBoundary>
+        <div className="bookTicketPage">
+          <center>
+            <h1 className="refreshTitle">Refresh to see seat status. </h1>
+            <div className="header">
+              <div className="statusByColour">
+                <div className="seatShow">
+                  <div className="greenBox"></div>
+                  <p className="seatStatusName">Empty Seat</p>
+                </div>
+                <div className="seatShow">
+                  <div className="blueBox"></div>
+                  <p className="seatStatusName">Filled Seat</p>
+                </div>
               </div>
-              <div className="seatShow">
-                <div className="blueBox"></div>
-                <p className="seatStatusName">Filled Seat</p>
+              <div className="TotalAmount">
+                <p>Rs. {TotalFare}</p>
+                <button>Continue Booking</button>
               </div>
             </div>
-            <div className="TotalAmount">
-              <p>Rs. {TotalFare}</p>
-              <button>Continue Booking</button>
-            </div>
-          </div>
-          {sameRouteBuses.map((bus) => {
-            return <BusStructure key={bus.id} id={bus.id} data={bus.busData} />;
-          })}
-        </center>
-      </div>
+            {sameRouteBuses.map((bus) => {
+              return (
+                <BusStructure key={bus.id} id={bus.id} data={bus.busData} />
+              );
+            })}
+          </center>
+        </div>
+      </ErrorBoundary>
     );
   } else {
     return <h2>Loading...</h2>;
