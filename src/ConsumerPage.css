@@ -1,0 +1,147 @@
+.consumerPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+.leftSide {
+  overflow: scroll;
+  width: 30vw;
+  background-color: rgb(243, 232, 232);
+}
+.leftSide::-webkit-scrollbar {
+  display: none;
+}
+.travellerImage {
+  margin-top: 25vh;
+  height: 10vw !important;
+  width: 10vw !important;
+  border-radius: 30vh;
+}
+.travellerName {
+  margin-top: 2vh;
+  font-family: fantasy;
+  text-align: center;
+  font-weight: 400;
+  font-size: 3vw;
+}
+.travellerDet {
+  font-family: fantasy;
+  text-align: center;
+  font-weight: 100;
+  font-size: 2vw;
+}
+.signOutButton {
+  background-color: rgb(167, 14, 255);
+  width: 85%;
+  font-size: 1.4em;
+  height: 4.2vh;
+  font-family: fantasy;
+  margin-top: 2vh;
+}
+.signOutButton:hover {
+  background-color: rgb(205, 133, 247);
+  cursor: pointer;
+}
+.rightSide {
+  width: 70vw;
+  background-color: rgb(189, 189, 189);
+}
+.busForm {
+  background-color: rgb(180, 180, 180);
+  padding: 1vw;
+  border-radius: 1.2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 40vw;
+}
+.busFormTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: rgb(255, 0, 0);
+  margin-bottom: 0.3vh;
+}
+#customers {
+  margin-top: 5vh;
+  border-collapse: collapse;
+  width: 80%;
+}
+
+#customers td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 0.3vw;
+  font-family: "Brush Script MT";
+}
+
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#customers tr:hover {
+  background-color: #ddd;
+}
+
+#customers th {
+  padding-top: 0.6vh;
+  padding-bottom: 0.6vh;
+  text-align: left;
+  background-color: #0a92b4;
+  color: white;
+}
+
+.directQRDownload {
+  font-family: "Times New Roman";
+  font-weight: 400;
+  color: rgb(168, 6, 6);
+}
+.QrButton {
+  background-color: rgb(33, 152, 231);
+  font-family: fantasy;
+  padding: 0.3vw;
+  font-size: 0.8em;
+  border: none;
+  outline: none;
+  border-radius: 0.8vw;
+  width: 10vw;
+  margin-top: 2vh;
+}
+.QrButton:hover {
+  cursor: pointer;
+  background-color: rgb(133, 188, 224);
+}
+.qrCode {
+  margin-top: 1vw;
+}
+.qrCodeData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.qrCodeData a {
+  font-family: "Times New Roman";
+  font-size: 0.8em;
+  color: rgb(65, 65, 158);
+}
+.qrCodeData a:hover {
+  cursor: pointer;
+}
+.bookTicket {
+  background-color: rgb(33, 152, 231);
+  font-family: fantasy;
+  padding: 0.3vw;
+  font-size: 0.8em;
+  border: none;
+  outline: none;
+  border-radius: 0.8vw;
+  margin-top: 2vh;
+  width: 15vw;
+}
+.bookTicket:hover {
+  cursor: pointer;
+  background-color: rgb(133, 188, 224);
+}

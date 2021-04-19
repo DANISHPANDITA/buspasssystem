@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+}
+.headerTitle {
+  color: rgb(156, 0, 0);
+  text-align: center;
+  font-size: 2em;
+  font-weight: 700;
+  font-style: italic;
+}
+.Home {
+  height: 100vh;
+  background-image: url("https://wallpaperaccess.com/full/1628632.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.loginTitle {
+  text-align: center;
+  font-size: 3em;
+  font-weight: 600;
+  font-style: italic;
+  color: rgb(182, 219, 79);
+  margin-bottom: 3vh;
+}
+.loginOptions {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30vh;
+}
+.adminButton {
+  width: 90%;
+  font-size: 1.2em;
+  background-color: rgb(240, 113, 96);
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+  outline: none;
+  border: none;
+  margin-bottom: 1vh;
+  font-family: fantasy;
+}
+.adminButton:hover {
+  background-color: rgb(243, 172, 172);
+  cursor: pointer;
+}
+.driverButton {
+  width: 90%;
+  font-size: 1.2em;
+  background-color: green;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+  outline: none;
+  border: none;
+  margin-bottom: 1vh;
+  font-family: fantasy;
+}
+.driverButton:hover {
+  background-color: rgb(155, 233, 161);
+  cursor: pointer;
+}
+.travellerButton {
+  width: 90%;
+  font-size: 1.2em;
+  background-color: rgb(80, 83, 245);
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+  outline: none;
+  border: none;
+  margin-bottom: 1vh;
+  font-family: fantasy;
+}
+.travellerButton:hover {
+  cursor: pointer;
+  background-color: rgb(162, 162, 236);
+}
+.signUpTitle {
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 800;
+  font-style: italic;
+  color: rgb(253, 75, 21);
+  margin-bottom: 3vh;
+}
+.signUpButton {
+  width: 90%;
+  font-size: 1.2em;
+  background-color: rgb(245, 193, 80);
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+  outline: none;
+  border: none;
+  margin-bottom: 1vh;
+  font-family: fantasy;
+}
+.signUpButton:hover {
+  cursor: pointer;
+  background-color: rgb(242, 253, 83);
+}

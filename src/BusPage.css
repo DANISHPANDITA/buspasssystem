@@ -1,0 +1,90 @@
+.busPage {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+.busPageLeftSide {
+  overflow: scroll;
+  width: 30vw;
+  background-color: rgb(177, 236, 177);
+}
+.busPageLeftSide::-webkit-scrollbar {
+  display: none;
+}
+.busDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.busDriverPhoto {
+  margin-top: 25vh;
+  height: 10vw !important;
+  width: 10vw !important;
+  border-radius: 30vh;
+}
+.busDriverName {
+  margin-top: 2vh;
+  font-family: fantasy;
+  text-align: center;
+  font-weight: 400;
+  font-size: 3vw;
+}
+.busDriverDet {
+  font-family: fantasy;
+  text-align: center;
+  font-weight: 100;
+  font-size: 1.8vw;
+  margin-left: 0.5vw;
+  text-overflow: ellipsis;
+}
+.qrButton {
+  background-color: rgb(47, 47, 88);
+  color: white;
+  font-family: fantasy;
+  font-size: 0.9vw;
+  padding: 0.7vw;
+  width: 10vw;
+  border-radius: 0.7vw;
+}
+.qrButton:hover {
+  background-color: black;
+  cursor: pointer;
+}
+.busPageRightSide {
+  width: 70vw;
+}
+.BusStructure {
+  height: 55vh;
+  width: 20vw;
+  border: 1px solid black;
+  border-radius: 0.7vw;
+  display: flex;
+  flex-direction: row;
+}
+.busColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.LeftColumns {
+  margin-bottom: 4vh;
+  margin-left: 1vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.RightColumns {
+  margin-bottom: 4vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 10vw;
+  margin-right: 1vw;
+}
+.BusSeat:hover {
+  cursor: pointer;
+  color: rgb(248, 103, 103) !important;
+}

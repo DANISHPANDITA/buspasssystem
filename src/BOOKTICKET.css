@@ -1,0 +1,54 @@
+.refreshTitle {
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  position: sticky;
+  color: rgb(201, 104, 104);
+  font-family: fantasy;
+  margin-bottom: 2vh;
+  font-style: italic;
+  font-stretch: semi-expanded;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.seatShow {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.greenBox {
+  height: 3vh;
+  width: 2.8vw;
+  background-color: rgb(131, 245, 150);
+}
+.blueBox {
+  height: 3vh;
+  width: 2.8vw;
+  background-color: blue;
+}
+.seatStatusName {
+  font-family: "Times New Roman";
+}
+.TotalAmount p {
+  font-family: "Times New Roman";
+  font-size: 3vh;
+  color: rgb(111, 36, 187);
+  font-weight: bold;
+}
+.TotalAmount button {
+  background-color: rgb(248, 189, 78);
+  border: none;
+  border-radius: 0.6vw;
+  width: 10vw;
+  font-family: fantasy;
+  font-size: 1.9vh;
+  outline-color: rgb(161, 111, 18);
+}
+.TotalAmount button:hover {
+  background-color: rgb(248, 203, 120);
+  cursor: pointer;
+}

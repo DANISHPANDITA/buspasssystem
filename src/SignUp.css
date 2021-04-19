@@ -1,0 +1,88 @@
+.signup {
+  height: 100vh;
+  background: url("https://trumpwallpapers.com/wp-content/uploads/Bus-Wallpaper-11-4096x2731-1-scaled.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.signupTitle {
+  color: rgb(156, 0, 0);
+  text-align: center;
+  font-size: 3em;
+  font-weight: 700;
+  font-style: italic;
+}
+.signupForm {
+  background-color: rgb(180, 180, 180);
+  padding: 1vw;
+  border-radius: 1.2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 25vw;
+}
+.inputTitle {
+  font-size: 0.6em;
+  font-weight: 600;
+  color: rgb(255, 0, 0);
+  margin-bottom: 0.1vh;
+  text-align: center;
+}
+.fileinput {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.inputField {
+  width: 80%;
+  height: 1.1vh;
+  padding: 0.3vw;
+  color: rgb(117, 117, 117);
+  border-radius: 0.3vw;
+  border: none;
+  outline: none;
+  font-size: 0.7em;
+}
+.inputField:focus {
+  border: 1px solid rgb(255, 218, 53);
+}
+.genderInput {
+  width: 70%;
+  height: 3vh;
+  border-radius: 0.3vw;
+  font-size: 0.8em;
+}
+.fileInputIconPhoto {
+  cursor: pointer;
+  height: 3vh !important;
+  width: 3vh !important;
+  color: rgb(251, 255, 0);
+  margin-bottom: 1.5vh;
+}
+.submitButton {
+  height: 4vh;
+  font-size: 1.2em;
+  font-family: fantasy;
+  width: 80%;
+  background-color: rgb(248, 222, 222);
+  border-radius: 0.5vw;
+  border: 1px solid orange;
+  margin-top: 0.7vh;
+}
+.submitButton:hover {
+  cursor: pointer;
+  background-color: rgb(253, 147, 147);
+}
+.errorMsg {
+  margin-top: 0.5vh;
+  background-color: greenyellow;
+  color: red;
+  font-size: 0.6em;
+  font-weight: 600;
+  text-align: center;
+  padding: 0vw 0.5vw 0vw 0.5vw;
+  border-radius: 0.6vw;
+}

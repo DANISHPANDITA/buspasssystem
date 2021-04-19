@@ -1,0 +1,59 @@
+.admin {
+  height: 100vh;
+  background-image: linear-gradient(
+    to bottom,
+    rgb(133, 133, 133),
+    rgb(223, 219, 219)
+  );
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.adminLoginTitle {
+  text-align: center;
+  color: rgb(31, 75, 158);
+  font-size: 3.52em;
+  font-style: italic;
+}
+.adminLoginForm {
+  margin-top: 15vh;
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+.adminErrorMsg {
+  margin-top: 0.7vh;
+  text-align: center;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  background-color: rgb(120, 248, 103);
+  color: red;
+}
+.adminLoginInput {
+  margin-top: 0.9vh;
+  height: 3vh;
+  font-size: 1em;
+  color: rgb(108, 114, 119);
+  border-radius: 0.7vw;
+  border: none;
+  outline: none;
+  padding: 0.5vw;
+}
+.adminLoginButton {
+  margin-top: 0.5vh;
+  font-size: 1.2em;
+  background-color: rgb(199, 195, 195);
+  font-family: fantasy;
+  border-radius: 0.8vw;
+  border: 1px solid grey;
+  outline: none;
+}
+.adminLoginButton:hover {
+  background-color: rgb(116, 111, 111);
+  cursor: pointer;
+}

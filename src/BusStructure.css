@@ -1,0 +1,35 @@
+.BusShape {
+  background-color: rgb(250, 245, 245);
+}
+.busTable {
+  margin-bottom: 7vh;
+  background-color: rgb(231, 231, 231);
+  border: 2px solid black;
+  height: 55vh;
+  width: 27vw;
+  border-radius: 0.9vw;
+}
+.busTable tr {
+  text-align: center;
+  margin-top: 5vh;
+  padding-bottom: 0.1vw;
+}
+.emptySeats {
+  background-color: rgb(131, 245, 150);
+}
+.filledSeats {
+  background-color: blue;
+}
+.emptySeats:hover {
+  background-color: green;
+  cursor: pointer;
+  color: rgb(233, 97, 97);
+}
+.frontPart {
+  width: 100%;
+}
+.DriverSeat {
+  height: 5vh;
+  width: 4.8vh;
+  margin-left: 310%;
+}
