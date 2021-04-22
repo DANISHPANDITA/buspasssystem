@@ -6,7 +6,8 @@ import { logout, selectUser } from "./app/counterSlice";
 import "./BusPage.css";
 import { auth, db } from "./firebase";
 import QrReader from "react-qr-reader";
-import { EventSeatRounded } from "@material-ui/icons";
+import { Tooltip } from "@material-ui/core";
+
 function BusPage() {
   const user = useSelector(selectUser);
   const [accData, setAccData] = useState([]);
@@ -17,7 +18,7 @@ function BusPage() {
   useEffect(() => {
     db.collection("BusData")
       .doc("111")
-      .collection("Account")
+      .collection("Buses")
       .onSnapshot((snapshot) =>
         setAccData(
           snapshot.docs.map((doc) => ({
@@ -27,6 +28,9 @@ function BusPage() {
         )
       );
   }, []);
+  var u = [];
+  var v = [];
+  var z = [];
   function search(userId, Array) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].Account.id === userId) {
@@ -35,7 +39,28 @@ function BusPage() {
     }
   }
 
-  var u = search(user?.uid, accData);
+  u = search(user?.uid, accData);
+
+  const findSeatsFromArray = (bus) => {
+    var resultA = bus.map((r) => {
+      if (r[1] === "empty" || r[1] === "filled") {
+        return [r[0], r[1]];
+      }
+    });
+    resultA = resultA.filter(function (element) {
+      return element !== undefined;
+    });
+    v = resultA.sort();
+  };
+  {
+    u && findSeatsFromArray(Object.entries(u.Account));
+  }
+  {
+    while (v.length) z.push(v.splice(0, 5));
+  }
+  {
+    z && console.log(z);
+  }
   const handleSignOut = () => {
     auth.signOut();
     dispatch(logout);
@@ -70,70 +95,42 @@ function BusPage() {
         <center>
           <h4>Refresh to see seat status</h4>
           <div className="BusStructure">
-            <div className="LeftColumns">
-              <div className="busColumn">
-                {[...Array(14)].map((x, i) => (
-                  <EventSeatRounded
-                    key={i}
-                    className="BusSeat"
-                    onClick={() => {
-                      var x = Math.floor(Math.random() * 5988);
-                      console.log(`Clicked on ${x}`);
-                    }}
+            <table className="busTable">
+              <tbody>
+                <div className="frontPart">
+                  <img
+                    className="DriverSeat"
+                    alt="DriverSeat"
+                    src="https://cdn3.iconfinder.com/data/icons/car-parts-18/64/car-seat-safety-child-baby-512.png"
                   />
-                ))}
-              </div>
-              <div className="busColumn">
-                {[...Array(14)].map((x, i) => (
-                  <EventSeatRounded
-                    className="BusSeat"
-                    onClick={() => {
-                      var x = Math.floor(Math.random() * 5988);
-                      console.log(`Clicked on ${x}`);
-                    }}
-                    key={i}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="RightColumns">
-              <div className="busColumn">
-                {[...Array(14)].map((x, i) => (
-                  <EventSeatRounded
-                    className="BusSeat"
-                    onClick={() => {
-                      var x = Math.floor(Math.random() * 5988);
-                      console.log(`Clicked on ${x}`);
-                    }}
-                    key={i}
-                  />
-                ))}
-              </div>
-              <div className="busColumn">
-                {[...Array(14)].map((x, i) => (
-                  <EventSeatRounded
-                    className="BusSeat"
-                    onClick={() => {
-                      var x = Math.floor(Math.random() * 5988);
-                      console.log(`Clicked on ${x}`);
-                    }}
-                    key={i}
-                  />
-                ))}
-              </div>
-              <div className="busColumn">
-                {[...Array(14)].map((x, i) => (
-                  <EventSeatRounded
-                    className="BusSeat"
-                    onClick={() => {
-                      var x = Math.floor(Math.random() * 5988);
-                      console.log(`Clicked on ${x}`);
-                    }}
-                    key={i}
-                  />
-                ))}
-              </div>
-            </div>
+                </div>
+                {z.map((items, index) => {
+                  return (
+                    <tr>
+                      {items.map((subItems, sIndex) => {
+                        if (subItems[1] === "empty") {
+                          return (
+                            <Tooltip title="Empty">
+                              <td className="emptySeats" key={sIndex}>
+                                {subItems[0]}
+                              </td>
+                            </Tooltip>
+                          );
+                        } else if (subItems[1] === "filled") {
+                          return (
+                            <Tooltip title="Occupied">
+                              <td className="filledSeats" key={subItems}>
+                                {subItems[0]}
+                              </td>
+                            </Tooltip>
+                          );
+                        }
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </center>
         <center>
