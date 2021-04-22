@@ -21,7 +21,8 @@ import {
 } from "./app/counterSlice";
 import { Avatar } from "@material-ui/core";
 import { db } from "./firebase";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
@@ -113,6 +114,11 @@ function ConsumerPage() {
     if (window.confirm("Have You downloaded the QRCode?")) {
       if (window.confirm("Do You Want To Continue?")) {
         toast(`Ticket Booked for ${totalBookings} passengers.`);
+        dispatch(SeatsReset());
+        dispatch(removePrevRoute());
+        dispatch(resetCount());
+        dispatch(fareReset());
+        setQrState(false);
       }
     }
   };
@@ -358,6 +364,7 @@ function ConsumerPage() {
             </center>
           )}
         </div>
+        <ToastContainer />
       </div>
     );
   }
