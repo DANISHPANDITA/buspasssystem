@@ -1,15 +1,24 @@
 import { Tooltip } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { countPeople } from "./app/counterSlice";
+import {
+  SeatSelection,
+  selectUser,
+  countPeople,
+  SelectPassengers,
+} from "./app/counterSlice";
+import { useSelector } from "react-redux";
 import d from "./BusArray";
 import "./BusStructure.css";
 import { db } from "./firebase";
 
 function BusStructure({ id, data }) {
   const dispatch = useDispatch();
+  const people = useSelector(SelectPassengers);
   const [seatStatusArray, setSeatStatusArray] = useState([]);
   const [aaa, setaaa] = useState([]);
+  const [SelectedSeats, setSelectedSeats] = useState([]);
+  const user = useSelector(selectUser);
 
   const func = (fieldKey) => {
     db.collection("BusData")
@@ -20,7 +29,6 @@ function BusStructure({ id, data }) {
         [fieldKey]: "filled",
       });
   };
-
   useEffect(() => {
     var result = Object.entries(data);
     var resultA = result.map((r) => {
@@ -31,12 +39,22 @@ function BusStructure({ id, data }) {
     resultA = resultA.filter(function (element) {
       return element !== undefined;
     });
+
     setSeatStatusArray(resultA.sort());
-  }, [data]);
+    var FilledSeats = result.map((r) => {
+      if (r[1] === "filled") {
+        return { [user.uid]: { [id]: r[0] } };
+      }
+    });
+    FilledSeats = FilledSeats.filter(function (element) {
+      return element !== undefined;
+    });
+
+    setSelectedSeats(FilledSeats.sort());
+  }, [user, id, data]);
 
   var values = Object.values(d);
   while (seatStatusArray.length) aaa.push(seatStatusArray.splice(0, 5));
-
   return (
     <div className="BusShape">
       <h3>Driver Name: {data.Name}</h3>
@@ -62,7 +80,6 @@ function BusStructure({ id, data }) {
                           key={sIndex}
                           onClick={() => {
                             dispatch(countPeople());
-
                             for (var m = 0; m < values.length; m++) {
                               if (`${index}${sIndex}` === values[m]) {
                                 var idKey = Object.keys(d).find(
@@ -71,14 +88,20 @@ function BusStructure({ id, data }) {
                                 if (
                                   window.confirm("Do You Want To Lock Seat?")
                                 ) {
+                                  dispatch(
+                                    SeatSelection({
+                                      UserSeatsArray: {
+                                        [user.uid]: { [data.id]: idKey },
+                                      },
+                                    })
+                                  );
                                   func(idKey);
                                 }
                               }
                             }
                           }}
                         >
-                          {" "}
-                          {subItems}{" "}
+                          {subItems}
                         </td>
                       </Tooltip>
                     );
@@ -86,8 +109,7 @@ function BusStructure({ id, data }) {
                     return (
                       <Tooltip title="Occupied">
                         <td className="filledSeats" key={subItems}>
-                          {" "}
-                          {subItems}{" "}
+                          {subItems}
                         </td>
                       </Tooltip>
                     );

@@ -4,12 +4,31 @@ import QRCode from "qrcode.react";
 import { useHistory } from "react-router";
 import "./ConsumerPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createRoute, fareTaker, logout, selectUser } from "./app/counterSlice";
+import _ from "lodash";
+import {
+  removePrevRoute,
+  createRoute,
+  fareReset,
+  fareTaker,
+  logout,
+  resetCount,
+  selectUser,
+  SeatsReset,
+  SelectBusSeatsArray,
+  SelectFare,
+  SelectPassengers,
+  SelectRoute,
+} from "./app/counterSlice";
 import { Avatar } from "@material-ui/core";
 import { db } from "./firebase";
+import { toast } from "react-toastify";
 
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
+  const BusPassSeats = useSelector(SelectBusSeatsArray);
+  const TotalAmount = useSelector(SelectFare);
+  const totalBookings = useSelector(SelectPassengers);
+  const routeSelected = useSelector(SelectRoute);
   const [d, setD] = useState("");
   const [Data, setData] = useState([]);
   const [fare, setFare] = useState(0);
@@ -17,8 +36,10 @@ function ConsumerPage() {
   const history = useHistory();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const [BusData, setBusData] = useState([]);
   const [accData, setAccData] = useState([]);
-
+  var w = [];
+  var q = [];
   useEffect(() => {
     fetch(
       "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
@@ -26,6 +47,12 @@ function ConsumerPage() {
       .then((res) => res.json())
       .then((data) => setData(data));
 
+    db.collection("BusData")
+      .doc("111")
+      .collection("Buses")
+      .onSnapshot((snapshot) =>
+        setBusData(snapshot.docs.map((doc) => doc.data()))
+      );
     db.collection("BusData")
       .doc("111")
       .collection("Account")
@@ -38,7 +65,28 @@ function ConsumerPage() {
         )
       );
   }, []);
+  {
+    BusData.map((m) => w.push(m.id));
+  }
+  {
+    BusPassSeats.map((e) => q.push(Object.values(e)));
+  }
+  {
+    q = q.reduce((a, b) => a.concat(b), []);
+  }
+  var bb = [];
 
+  //q(Ids of Buses Booked by user) and w(Buses Ids)
+  function findBus(ele1, ele2) {
+    for (var i = 0; i < ele1.length; i++) {
+      for (var j = 0; j < ele2.length; j++) {
+        if (Object.keys(ele1[j])[0] === ele2[i].id) {
+          bb.push([ele2[i]["Bus Number"], Object.values(ele1[j])[0]]);
+        }
+      }
+    }
+  }
+  findBus(q, BusData);
   function search(userId, Array) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].Account.id === userId) {
@@ -54,13 +102,17 @@ function ConsumerPage() {
   } = useForm();
 
   const handleSignOut = () => {
+    dispatch(SeatsReset());
+    dispatch(removePrevRoute());
+    dispatch(resetCount());
+    dispatch(fareReset());
     dispatch(logout());
     history.push("/");
   };
   const bookTicket = () => {
     if (window.confirm("Have You downloaded the QRCode?")) {
       if (window.confirm("Do You Want To Continue?")) {
-        console.log("true");
+        toast(`Ticket Booked for ${totalBookings} passengers.`);
       }
     }
   };
@@ -128,11 +180,11 @@ function ConsumerPage() {
     }
   };
   const a = [
-    tableData.Source,
-    tableData.Destination,
-    tableData.DateOfJourney,
-    parseInt(d),
-    fare,
+    routeSelected.sour_des,
+    totalBookings,
+    new Date().toString().slice(4, 15),
+    TotalAmount.fare * totalBookings,
+    bb.join("---"),
   ];
   const sour_des = a[0] + "-" + a[1];
   const generateQR = () => {
@@ -250,12 +302,44 @@ function ConsumerPage() {
               <button className="QrButton" onClick={bookSeat}>
                 Book Seat
               </button>
+            </center>
+          )}
+
+          {BusPassSeats.length > 0 && (
+            <center>
+              <table id="customers">
+                <tbody>
+                  <tr>
+                    <th>Header</th>
+                    <th>Information</th>
+                  </tr>
+                  <tr>
+                    <td>Route</td>
+                    <td>{routeSelected.sour_des}</td>
+                  </tr>
+                  <tr>
+                    <td>Total Bookings</td>
+                    <td>{totalBookings}</td>
+                  </tr>
+                  <tr>
+                    <td>Date Of Journey</td>
+                    <td>{new Date().toString().slice(4, 15)}</td>
+                  </tr>
+                  <tr>
+                    <td>Total Fare</td>
+                    <td>Rs.{TotalAmount.fare * totalBookings}</td>
+                  </tr>
+                  <tr>
+                    <td>Seats Alloted</td>
+                    <td>{bb.join("---")}</td>
+                  </tr>
+                </tbody>
+              </table>
               <button onClick={generateQR} className="QrButton">
                 Click Here To Generate QR
               </button>
             </center>
           )}
-
           {qrState && (
             <center>
               {" "}

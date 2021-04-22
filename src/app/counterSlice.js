@@ -7,6 +7,7 @@ export const counterSlice = createSlice({
     Sour_Des: "",
     fare: 0,
     passengers: 0,
+    UserSeatsArray: [],
   },
   reducers: {
     login: (state, action) => {
@@ -36,6 +37,15 @@ export const counterSlice = createSlice({
     resetCount: (state) => {
       state.passengers = 0;
     },
+    SeatSelection: (state, action) => {
+      state.UserSeatsArray = [
+        ...state.UserSeatsArray,
+        action.payload.UserSeatsArray,
+      ];
+    },
+    SeatsReset: (state) => {
+      state.UserSeatsArray = [];
+    },
   },
 });
 
@@ -49,11 +59,14 @@ export const {
   countPeople,
   SubPeople,
   resetCount,
+  SeatSelection,
+  SeatsReset,
 } = counterSlice.actions;
 
 export const selectUser = (state) => state.busPassApp.user;
 export const SelectRoute = (state) => state.busPassApp.Sour_Des;
 export const SelectFare = (state) => state.busPassApp.fare;
 export const SelectPassengers = (state) => state.busPassApp.passengers;
+export const SelectBusSeatsArray = (state) => state.busPassApp.UserSeatsArray;
 
 export default counterSlice.reducer;

@@ -29,6 +29,7 @@ function App() {
           })
         );
       } else {
+        auth.signOut();
         dispatch(logout());
       }
     });
@@ -69,6 +70,7 @@ function App() {
           ) : (
             <Route exact path={`/admin/${user?.uid}`} component={Admin} />
           )}
+
           <Route exact path={`/bookseat/${user?.uid}`} component={BOOKTICKET} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/admin" component={Admin} />

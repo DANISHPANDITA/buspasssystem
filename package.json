@@ -14,6 +14,7 @@
     "aadhaar-validator": "^1.1.0",
     "array-to-table": "^1.0.1",
     "bootstrap": "^4.6.0",
+    "d3": "^6.7.0",
     "distance-from": "^1.1.2",
     "firebase": "^8.3.2",
     "firebase-tools": "^9.8.0",
@@ -29,9 +30,11 @@
     "react-qr-code": "^1.1.1",
     "react-qr-reader": "^2.2.1",
     "react-redux": "^7.2.3",
+    "react-responsive-carousel": "^3.2.18",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-table": "^7.6.3"
+    "react-table": "^7.6.3",
+    "react-toastify": "^7.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
