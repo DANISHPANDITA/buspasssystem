@@ -49,7 +49,7 @@ function BOOKTICKET() {
       );
     setTotalFare(fare.fare * passengers);
   }, [fare, passengers]);
-  console.log(BusSeatsFilled);
+
   function searchSameRouteBuses(Array, String) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].busData.route === String) {
@@ -58,7 +58,7 @@ function BOOKTICKET() {
     }
   }
   searchSameRouteBuses(BusInfo, route.sour_des);
-
+  console.log(sameRouteBuses);
   function search(Array1, Array2) {
     for (var i = 0; i < Array1.length; i++) {
       for (var j = 0; j < Array2.length; j++) {

@@ -58,12 +58,10 @@ function BusPage() {
   {
     while (v.length) z.push(v.splice(0, 5));
   }
-  {
-    z && console.log(z);
-  }
+
   const handleSignOut = () => {
     auth.signOut();
-    dispatch(logout);
+    dispatch(logout());
     history.push("/");
   };
   const handleQR = () => {
@@ -74,6 +72,7 @@ function BusPage() {
       setQrData(data);
     }
   };
+  console.log(qrData);
   return (
     <div className="busPage">
       <div className="busPageLeftSide">
@@ -141,17 +140,26 @@ function BusPage() {
         </center>
 
         {qrState && (
-          <QrReader
-            resolution={1920}
-            delay={500}
-            onError={(err) => {
-              console.log(err);
-            }}
-            onScan={getQRData}
-            style={{ width: "100%", height: "20vh" }}
-          />
+          <center>
+            <QrReader
+              resolution={720}
+              delay={500}
+              onError={(err) => {
+                console.log(err);
+              }}
+              onScan={getQRData}
+              style={{ width: "20%", height: "3vh" }}
+            />
+          </center>
         )}
-        <p>{qrData}</p>
+        {qrData && (
+          <center>
+            <p>{qrData}</p>
+            {() => {
+              setQrState(null);
+            }}
+          </center>
+        )}
       </div>
     </div>
   );

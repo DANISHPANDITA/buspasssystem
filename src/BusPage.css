@@ -38,6 +38,7 @@
   text-overflow: ellipsis;
 }
 .qrButton {
+  margin-top: 4vh;
   background-color: rgb(47, 47, 88);
   color: white;
   font-family: fantasy;

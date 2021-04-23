@@ -76,13 +76,12 @@ function ConsumerPage() {
     q = q.reduce((a, b) => a.concat(b), []);
   }
   var bb = [];
-
   //q(Ids of Buses Booked by user) and w(Buses Ids)
   function findBus(ele1, ele2) {
     for (var i = 0; i < ele1.length; i++) {
       for (var j = 0; j < ele2.length; j++) {
-        if (Object.keys(ele1[j])[0] === ele2[i].id) {
-          bb.push([ele2[i]["Bus Number"], Object.values(ele1[j])[0]]);
+        if (Object.keys(ele1[i])[0] === ele2[j].id) {
+          bb.push([ele2[i]["Bus Number"], Object.values(ele1[i])[0]]);
         }
       }
     }
@@ -186,6 +185,8 @@ function ConsumerPage() {
     }
   };
   const a = [
+    tableData.Source,
+    tableData.Destination,
     routeSelected.sour_des,
     totalBookings,
     new Date().toString().slice(4, 15),
@@ -197,11 +198,13 @@ function ConsumerPage() {
     setQrState(true);
   };
   const downloadQR = () => {
-    const canvas = document.getElementById(a.toString());
-    const pngUrl = canvas.toDataURL("image/jpg");
+    const canvas = document.getElementById(a.slice(2, 7).toString());
+    const pngUrl = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
     let downloadLink = document.createElement("a");
     downloadLink.href = pngUrl;
-    downloadLink.download = a.toString();
+    downloadLink.download = `${a.slice(2, 7).toString()}.jpeg`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -336,7 +339,7 @@ function ConsumerPage() {
                     <td>Rs.{TotalAmount.fare * totalBookings}</td>
                   </tr>
                   <tr>
-                    <td>Seats Alloted</td>
+                    <td>Seats Alloted (Bus No. , Seat No.)</td>
                     <td>{bb.join("---")}</td>
                   </tr>
                 </tbody>
@@ -351,10 +354,11 @@ function ConsumerPage() {
               {" "}
               <div className="qrCodeData">
                 <QRCode
-                  id={a.toString()}
-                  className="qrCode"
+                  id={a.slice(2, 7).toString()}
                   size={100}
-                  value={a.toString()}
+                  value={a.slice(2, 7).toString()}
+                  level="H"
+                  includeMargin={true}
                 />
                 <a onClick={downloadQR}> Download QR </a>
                 <button onClick={bookTicket} className="bookTicket">
