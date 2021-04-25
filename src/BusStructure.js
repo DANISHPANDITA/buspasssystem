@@ -1,5 +1,5 @@
-import { Tooltip } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import { Tooltip } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import {
   SeatSelection,
@@ -20,15 +20,6 @@ function BusStructure({ id, data }) {
   const [SelectedSeats, setSelectedSeats] = useState([]);
   const user = useSelector(selectUser);
 
-  const func = (fieldKey) => {
-    db.collection("BusData")
-      .doc("111")
-      .collection("Buses")
-      .doc(id)
-      .update({
-        [fieldKey]: "filled",
-      });
-  };
   useEffect(() => {
     var result = Object.entries(data);
     var resultA = result.map((r) => {
@@ -95,6 +86,15 @@ function BusStructure({ id, data }) {
                                       },
                                     })
                                   );
+                                  function func(fieldKey) {
+                                    db.collection("BusData")
+                                      .doc("111")
+                                      .collection("Buses")
+                                      .doc(id)
+                                      .update({
+                                        [fieldKey]: "filled",
+                                      });
+                                  }
                                   func(idKey);
                                 }
                               }

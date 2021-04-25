@@ -7,7 +7,6 @@ import "./BusPage.css";
 import { auth, db } from "./firebase";
 import QrReader from "react-qr-reader";
 import { Tooltip } from "@material-ui/core";
-import { toast, ToastContainer } from "react-toastify";
 
 function BusPage() {
   const user = useSelector(selectUser);
@@ -16,6 +15,7 @@ function BusPage() {
   const [qrData, setQrData] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
+
   useEffect(() => {
     db.collection("BusData")
       .doc("111")
@@ -45,7 +45,6 @@ function BusPage() {
     u && (u1 = u.Account);
   }
   var u2 = u1["Bus Number"];
-  console.log(u2);
   const findSeatsFromArray = (bus) => {
     var resultA = bus.map((r) => {
       if (r[1] === "empty" || r[1] === "filled") {
@@ -84,7 +83,9 @@ function BusPage() {
     }
   };
   const qrDataArray = qrData.split("---");
-
+  const TotalFare = qrDataArray[0].split(",")[3];
+  const TotalPassengers = qrDataArray[0].split(",")[1];
+  // const fareForOne = qrDataArray[3];
   function getPosition(string, subString, index) {
     return string.split(subString, index).join(subString).length;
   }
@@ -96,18 +97,9 @@ function BusPage() {
       c.push(qrDataArray[i]);
     }
   }
+  console.log(c);
   c = c.filter((ele) => ele.slice(0, ele.length - 3) === u2);
-  {
-    c.length === 0 && toast.error("No Seat booked in this bus");
-  }
-  {
-    c.length > 0 &&
-      toast.success(
-        `Person booked Seat ${c
-          .toString()
-          .slice(c.toString().length - 2, c.toString().length)}`
-      );
-  }
+
   return (
     <div className="busPage">
       <div className="busPageLeftSide">
@@ -185,8 +177,26 @@ function BusPage() {
             />
           </center>
         )}
+        {TotalPassengers && TotalFare && c.length > 0 && (
+          <center>
+            <table id="customers">
+              <tr>
+                <td>No. of Passengers</td>
+                <td>{TotalPassengers}</td>
+              </tr>
+              <tr>
+                <td>Total Amount</td>
+                <td>{TotalFare}</td>
+              </tr>
+              <tr>
+                <td>Seats Booked</td>
+                <td></td>
+              </tr>
+            </table>
+            <button>Proceed To Pay</button>
+          </center>
+        )}
       </div>
-      <ToastContainer />
     </div>
   );
 }
