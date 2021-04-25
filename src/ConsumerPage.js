@@ -368,7 +368,6 @@ function ConsumerPage() {
             </center>
           )}
         </div>
-        <ToastContainer />
       </div>
     );
   }
