@@ -7,14 +7,56 @@ import "./BusPage.css";
 import { auth, db } from "./firebase";
 import QrReader from "react-qr-reader";
 import { Tooltip } from "@material-ui/core";
+import _ from "lodash";
+import moment from "moment";
 
 function BusPage() {
   const user = useSelector(selectUser);
   const [accData, setAccData] = useState([]);
+  const [Cities, setCities] = useState([]);
   const [qrState, setQrState] = useState(null);
+  const [BusLocation, setBusLocation] = useState([]);
+  const [UpdateTime, setUpdateTime] = useState("");
   const [qrData, setQrData] = useState("");
   const dispatch = useDispatch();
+  const [Loc, setLoc] = useState("");
   const history = useHistory();
+
+  useEffect(() => {
+    fetch(
+      "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
+    )
+      .then((res) => res.json())
+      .then((data) => setCities(data));
+  }, []);
+
+  useEffect(() => {
+    setUpdateTime(moment().format("h:mm a"));
+    var temp = [];
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        alert("Location Not Found");
+      }
+    }
+    function showPosition(position) {
+      temp.push(
+        _.floor(position.coords.latitude, 1),
+        _.floor(position.coords.longitude, 1)
+      );
+      setBusLocation(temp);
+    }
+    getLocation();
+    Cities.map((o) => {
+      if (
+        _.floor(o.lat, 1) === BusLocation[0] &&
+        _.floor(o.lng, 1) === BusLocation[1]
+      ) {
+        setLoc(o.name);
+      }
+    });
+  }, [Cities]);
 
   useEffect(() => {
     db.collection("BusData")
@@ -97,7 +139,6 @@ function BusPage() {
       c.push(qrDataArray[i]);
     }
   }
-  console.log(c);
   c = c.filter((ele) => ele.slice(0, ele.length - 3) === u2);
 
   return (
@@ -115,6 +156,20 @@ function BusPage() {
           <button className="signOutButton" onClick={handleSignOut}>
             Sign Out
           </button>
+        </center>
+        <center>
+          {BusLocation.length > 0 ? (
+            <div className="locationUpdate">
+              <h4>Last Updated at : {UpdateTime}</h4>
+            </div>
+          ) : (
+            <h2>Location Not Available</h2>
+          )}
+          {Loc.length === 0 ? (
+            <h4>Can't find the location at the moment. Try after some time.</h4>
+          ) : (
+            <h4>Current Location : {Loc}</h4>
+          )}
         </center>
       </div>
       <div className="busPageRightSide">
@@ -160,9 +215,11 @@ function BusPage() {
           </div>
         </center>
         <center>
-          <button className="qrButton" onClick={handleQR}>
-            QRCode
-          </button>
+          <div className="qrArea">
+            <button className="qrButton" onClick={handleQR}>
+              QRCode
+            </button>
+          </div>
         </center>
         {qrState && (
           <center>
@@ -190,10 +247,14 @@ function BusPage() {
               </tr>
               <tr>
                 <td>Seats Booked</td>
-                <td></td>
+                <td>
+                  {c.map((ele) => (
+                    <p>{ele.split(",")[1]}</p>
+                  ))}
+                </td>
               </tr>
             </table>
-            <button>Proceed To Pay</button>
+            <button className="busPaymentButton">Proceed For Payment</button>
           </center>
         )}
       </div>

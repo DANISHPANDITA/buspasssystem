@@ -75,18 +75,21 @@ function ConsumerPage() {
   {
     q = q.reduce((a, b) => a.concat(b), []);
   }
+
   var bb = [];
   //q(Ids of Buses Booked by user) and w(Buses Ids)
   function findBus(ele1, ele2) {
     for (var i = 0; i < ele1.length; i++) {
       for (var j = 0; j < ele2.length; j++) {
         if (Object.keys(ele1[i])[0] === ele2[j].id) {
-          bb.push([ele2[i]["Bus Number"], Object.values(ele1[i])[0]]);
+          bb.push([ele2[j]["Bus Number"], Object.values(ele1[i])[0]]);
         }
       }
     }
   }
-  findBus(q, BusData);
+  {
+    BusData && findBus(q, BusData);
+  }
   function search(userId, Array) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].Account.id === userId) {
@@ -146,7 +149,6 @@ function ConsumerPage() {
         dist = dist * 0.8684;
       }
       setFare(parseInt(1.4 * dist));
-
       return dist;
     }
   }

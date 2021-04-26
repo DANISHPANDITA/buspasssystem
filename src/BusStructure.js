@@ -13,7 +13,6 @@ import "./BusStructure.css";
 import { db } from "./firebase";
 
 function BusStructure({ id, data }) {
-  console.log(data);
   const dispatch = useDispatch();
   const people = useSelector(SelectPassengers);
   const [seatStatusArray, setSeatStatusArray] = useState([]);
