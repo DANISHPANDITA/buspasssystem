@@ -36,8 +36,6 @@ function BOOKTICKET() {
           }))
         )
       );
-  }, []);
-  useEffect(() => {
     db.collection("BusData")
       .doc("111")
       .collection("Buses")

@@ -19,19 +19,18 @@ function BusStructure({ id, data }) {
   const [aaa, setaaa] = useState([]);
   const [SelectedSeats, setSelectedSeats] = useState([]);
   const user = useSelector(selectUser);
-
   useEffect(() => {
     var result = Object.entries(data);
-    var resultA = result.map((r) => {
+    result = result.map((r) => {
       if (r[1] === "empty" || r[1] === "filled") {
         return r[0];
       }
     });
-    resultA = resultA.filter(function (element) {
+    result = result.filter(function (element) {
       return element !== undefined;
     });
 
-    setSeatStatusArray(resultA.sort());
+    setSeatStatusArray(result.sort());
     var FilledSeats = result.map((r) => {
       if (r[1] === "filled") {
         return { [user.uid]: { [id]: r[0] } };
@@ -40,10 +39,8 @@ function BusStructure({ id, data }) {
     FilledSeats = FilledSeats.filter(function (element) {
       return element !== undefined;
     });
-
     setSelectedSeats(FilledSeats.sort());
-  }, [user, id, data]);
-
+  }, [data, id, user]);
   var values = Object.values(d);
   while (seatStatusArray.length) aaa.push(seatStatusArray.splice(0, 5));
   return (
@@ -71,7 +68,7 @@ function BusStructure({ id, data }) {
                           key={sIndex}
                           onClick={() => {
                             dispatch(countPeople());
-                            for (var m = 0; m < values.length; m++) {
+                            for (let m = 0; m < values.length; m++) {
                               if (`${index}${sIndex}` === values[m]) {
                                 var idKey = Object.keys(d).find(
                                   (key) => d[key] === values[m]
