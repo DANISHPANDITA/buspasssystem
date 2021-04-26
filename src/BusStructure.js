@@ -13,12 +13,14 @@ import "./BusStructure.css";
 import { db } from "./firebase";
 
 function BusStructure({ id, data }) {
+  console.log(data);
   const dispatch = useDispatch();
   const people = useSelector(SelectPassengers);
   const [seatStatusArray, setSeatStatusArray] = useState([]);
   const [aaa, setaaa] = useState([]);
   const [SelectedSeats, setSelectedSeats] = useState([]);
   const user = useSelector(selectUser);
+
   useEffect(() => {
     var result = Object.entries(data);
     result = result.map((r) => {
@@ -40,9 +42,10 @@ function BusStructure({ id, data }) {
       return element !== undefined;
     });
     setSelectedSeats(FilledSeats.sort());
-  }, [data, id, user]);
+  }, []);
   var values = Object.values(d);
   while (seatStatusArray.length) aaa.push(seatStatusArray.splice(0, 5));
+
   return (
     <div className="BusShape">
       <h3>Driver Name: {data.Name}</h3>

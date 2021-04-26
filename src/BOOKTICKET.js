@@ -24,7 +24,7 @@ function BOOKTICKET() {
   const [TotalFare, setTotalFare] = useState("");
   const sameRouteBuses = [];
 
-  useEffect(() => {
+  useEffect(async () => {
     db.collection("BusData")
       .doc("111")
       .collection("Account")
@@ -36,7 +36,8 @@ function BOOKTICKET() {
           }))
         )
       );
-    db.collection("BusData")
+    await db
+      .collection("BusData")
       .doc("111")
       .collection("Buses")
       .onSnapshot((snapshot) =>
@@ -48,7 +49,7 @@ function BOOKTICKET() {
         )
       );
     setTotalFare(fare.fare * passengers);
-  }, [fare, passengers]);
+  }, []);
 
   function searchSameRouteBuses(Array, String) {
     for (var i = 0; i < Array.length; i++) {
