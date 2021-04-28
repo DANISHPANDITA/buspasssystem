@@ -17,6 +17,7 @@ function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const [accData, setAccData] = useState([]);
+
   useEffect(() => {
     auth.onAuthStateChanged((userID) => {
       if (userID) {
@@ -45,6 +46,7 @@ function App() {
         )
       );
   }, [dispatch]);
+
   function search(userId, Array) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].Account.id === userId) {

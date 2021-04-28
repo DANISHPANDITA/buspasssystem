@@ -9,17 +9,22 @@ import QrReader from "react-qr-reader";
 import { Tooltip } from "@material-ui/core";
 import _ from "lodash";
 import moment from "moment";
+import { addToBookArray, SelectBookedSeatsArray } from "./app/driverSlice";
 
 function BusPage() {
   const user = useSelector(selectUser);
   const [accData, setAccData] = useState([]);
   const [Cities, setCities] = useState([]);
   const [qrState, setQrState] = useState(null);
+  const BookedSeats = useSelector(SelectBookedSeatsArray);
+  const [SecondTableState, setSecondTableState] = useState(false);
+  const [BookSeatArray, setBookSeatArray] = useState([]);
   const [BusLocation, setBusLocation] = useState([]);
   const [UpdateTime, setUpdateTime] = useState("");
   const [qrData, setQrData] = useState("");
   const dispatch = useDispatch();
   const [Loc, setLoc] = useState("");
+  const [dest, setDest] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -71,6 +76,7 @@ function BusPage() {
         )
       );
   }, []);
+
   var u = [];
   var v = [];
   var z = [];
@@ -83,6 +89,7 @@ function BusPage() {
   }
   var u1 = {};
   u = search(user?.uid, accData);
+
   {
     u && (u1 = u.Account);
   }
@@ -117,6 +124,7 @@ function BusPage() {
     if (data) {
       if (data.split(",")[2] === new Date().toString().slice(4, 15)) {
         setQrData(data);
+        setSecondTableState(true);
         setQrState(null);
       } else {
         setQrState(null);
@@ -140,6 +148,35 @@ function BusPage() {
     }
   }
   c = c.filter((ele) => ele.slice(0, ele.length - 3) === u2);
+  c.sort();
+
+  const saveQrData = () => {
+    if (qrData) {
+      dispatch(addToBookArray(qrData));
+      setSecondTableState(false);
+    }
+  };
+  useEffect(() => {
+    BookedSeats.map((ticket) => {
+      const PosOfFirstHypen = getPosition(ticket, "-", 1);
+      const posOfFirstComma = getPosition(ticket, ",", 1);
+      const PosOfSeats = getPosition(ticket, ",", 4);
+      var ticketSeats = ticket.substr(PosOfSeats + 1, ticket.length);
+      ticketSeats = ticketSeats.split("---");
+
+      ticketSeats.map((ele) =>
+        BookSeatArray.push(ele.substr(ele.length - 2, ele.length))
+      );
+      setDest(ticket.slice(PosOfFirstHypen + 1, posOfFirstComma));
+      if (Loc) {
+        if (Loc === dest) {
+          alert(
+            `Reached Location for Passengers on Seats-${BookSeatArray.sort()}`
+          );
+        }
+      }
+    });
+  }, [Loc, dest]);
 
   return (
     <div className="busPage">
@@ -148,7 +185,7 @@ function BusPage() {
           <Avatar className="busDriverPhoto" src={user?.AvatarPhoto} alt="" />
         </center>
         <div className="busDetails">
-          <h2 className="busDriverName">{user?.Name}</h2>
+          <h2 className="busDriverName">{u?.Account.Name}</h2>
           <h3 className="busDriverDet">{user?.email}</h3>
           <h3 className="busDriverDet">{u?.Account.Phone}</h3>
         </div>
@@ -234,7 +271,7 @@ function BusPage() {
             />
           </center>
         )}
-        {TotalPassengers && TotalFare && c.length > 0 && (
+        {TotalPassengers && SecondTableState && TotalFare && c.length > 0 && (
           <center>
             <table id="customers">
               <tr>
@@ -254,7 +291,9 @@ function BusPage() {
                 </td>
               </tr>
             </table>
-            <button className="busPaymentButton">Proceed For Payment</button>
+            <button onClick={saveQrData} className="saveData">
+              Continue
+            </button>
           </center>
         )}
       </div>

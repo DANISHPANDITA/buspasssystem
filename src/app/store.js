@@ -2,11 +2,12 @@ import { combineReducers, createStore } from "redux";
 import counterReducer from "./counterSlice";
 import { loadState, saveState } from "./localStorage";
 import throttle from "lodash.throttle";
-
+import driverReducer from "./driverSlice";
 const persistedState = loadState("State");
 
 const reducer = combineReducers({
   busPassApp: counterReducer,
+  DriverBookings: driverReducer,
 });
 
 const store = createStore(

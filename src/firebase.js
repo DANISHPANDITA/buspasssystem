@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
 const firebaseApp = firebase.initializeApp({
-  apiKey: "AIzaSyBzq5Qhroz3SZAWx3Vs-9uwcqzB0koKe6k",
+  apiKey: "AIzaSyAbydlqN30o1kW0UvXf7AnuhH2nWK-g-F4",
   authDomain: "busapp-aabdc.firebaseapp.com",
   projectId: "busapp-aabdc",
   storageBucket: "busapp-aabdc.appspot.com",

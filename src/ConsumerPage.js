@@ -23,6 +23,7 @@ import { Avatar } from "@material-ui/core";
 import { db } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import moment from "moment";
 
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
@@ -154,36 +155,41 @@ function ConsumerPage() {
   }
 
   const onSubmit = (data) => {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    today = yyyy + "-" + mm + "-" + dd;
-    if (today !== data.DateOfJourney) {
-      alert("Date should be entered of present date.");
+    var x = moment().format("HH");
+    if (x >= 7 && x <= 21) {
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      if (dd < 10) {
+        dd = "0" + dd;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
+      today = yyyy + "-" + mm + "-" + dd;
+      if (today !== data.DateOfJourney) {
+        alert("Date should be entered of present date.");
+      } else {
+        setTableData(data);
+        let sourceStation = Data.filter(
+          (city) => city.name.toLowerCase() === data.Source.toLowerCase()
+        );
+        let desStation = Data.filter(
+          (city) => city.name.toLowerCase() === data.Destination.toLowerCase()
+        );
+        setD(
+          distance(
+            parseFloat(sourceStation[0].lat),
+            parseFloat(sourceStation[0].lng),
+            parseFloat(desStation[0].lat),
+            parseFloat(desStation[0].lng),
+            "K"
+          )
+        );
+      }
     } else {
-      setTableData(data);
-      let sourceStation = Data.filter(
-        (city) => city.name.toLowerCase() === data.Source.toLowerCase()
-      );
-      let desStation = Data.filter(
-        (city) => city.name.toLowerCase() === data.Destination.toLowerCase()
-      );
-      setD(
-        distance(
-          parseFloat(sourceStation[0].lat),
-          parseFloat(sourceStation[0].lng),
-          parseFloat(desStation[0].lat),
-          parseFloat(desStation[0].lng),
-          "K"
-        )
-      );
+      alert("Booking only allowed between 9 A.M and 9 P.M");
     }
   };
   const a = [
@@ -200,13 +206,15 @@ function ConsumerPage() {
     setQrState(true);
   };
   const downloadQR = () => {
+    const hashCode = (s) =>
+      s.split("").reduce((a, b) => ((a << 5) + a - b.charCodeAt(0)) | 0, 0);
     const canvas = document.getElementById(a.slice(2, 7).toString());
     const pngUrl = canvas
       .toDataURL("image/png")
       .replace("image/png", "image/octet-stream");
     let downloadLink = document.createElement("a");
     downloadLink.href = pngUrl;
-    downloadLink.download = `${a.slice(2, 7).toString()}.jpeg`;
+    downloadLink.download = `QRCode/${hashCode(a.slice(2, 7).toString())}.jpeg`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -299,11 +307,11 @@ function ConsumerPage() {
                   </tr>
                   <tr>
                     <td>Distance</td>
-                    <td>{parseInt(d)}KM</td>
+                    <td>{parseInt(d)} KM</td>
                   </tr>
                   <tr>
                     <td>Total Fare</td>
-                    <td>Rs.{parseInt(fare)}</td>
+                    <td>Rs. {parseInt(fare)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -338,7 +346,7 @@ function ConsumerPage() {
                   </tr>
                   <tr>
                     <td>Total Fare</td>
-                    <td>Rs.{TotalAmount.fare * totalBookings}</td>
+                    <td>Rs. {TotalAmount.fare * totalBookings}</td>
                   </tr>
                   <tr>
                     <td>Seats Alloted (Bus No. , Seat No.)</td>
