@@ -69,7 +69,6 @@ function BusStructure({ id, data }) {
                           className="emptySeats"
                           key={sIndex}
                           onClick={() => {
-                            dispatch(countPeople());
                             for (let m = 0; m < values.length; m++) {
                               if (`${index}${sIndex}` === values[m]) {
                                 var idKey = Object.keys(d).find(
@@ -78,6 +77,7 @@ function BusStructure({ id, data }) {
                                 if (
                                   window.confirm("Do You Want To Lock Seat?")
                                 ) {
+                                  dispatch(countPeople());
                                   dispatch(
                                     SeatSelection({
                                       UserSeatsArray: {

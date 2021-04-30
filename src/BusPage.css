@@ -37,6 +37,28 @@
   margin-left: 0.5vw;
   text-overflow: ellipsis;
 }
+.emptyBus {
+  position: absolute;
+  bottom: 1vh;
+  width: 30vw;
+}
+.emptyBus button {
+  width: 90%;
+  text-align: center;
+  border: none;
+  outline: none;
+  height: 4vh;
+  align-items: center;
+  font-family: "Rockwell Extra Bold";
+  font-size: 1em;
+  font-weight: 600;
+  background-color: rgb(248, 121, 121);
+  border-radius: 0.7vw;
+}
+.emptyBus button:hover {
+  cursor: pointer;
+  background-color: rgb(238, 201, 201);
+}
 .qrArea {
   margin-top: 7vh;
 }

@@ -15,14 +15,21 @@
   padding-bottom: 0.1vw;
 }
 .emptySeats {
+  padding: 0.1vw;
+  border: 1px solid rgb(0, 56, 0);
   background-color: rgb(131, 245, 150);
+  box-shadow: 5px 5px 8px 10px #888888;
 }
 .filledSeats {
+  padding: 0.1vw;
   background-color: blue;
+  border: 1px solid rgb(3, 11, 46);
+  box-shadow: 5px 5px 8px 10px #888888;
 }
 .emptySeats:hover {
   background-color: green;
   cursor: pointer;
+  transform: scale(0.8);
   color: rgb(233, 97, 97);
 }
 .frontPart {

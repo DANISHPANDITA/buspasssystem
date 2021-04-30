@@ -9,7 +9,11 @@ import QrReader from "react-qr-reader";
 import { Tooltip } from "@material-ui/core";
 import _ from "lodash";
 import moment from "moment";
-import { addToBookArray, SelectBookedSeatsArray } from "./app/driverSlice";
+import {
+  addToBookArray,
+  emptyBookedSeatsBusArray,
+  SelectBookedSeatsArray,
+} from "./app/driverSlice";
 
 function BusPage() {
   const user = useSelector(selectUser);
@@ -26,7 +30,7 @@ function BusPage() {
   const [Loc, setLoc] = useState("");
   const [dest, setDest] = useState("");
   const history = useHistory();
-
+  var [u, setU] = useState([]);
   useEffect(() => {
     fetch(
       "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
@@ -76,8 +80,7 @@ function BusPage() {
         )
       );
   }, []);
-
-  var u = [];
+  var u1 = {};
   var v = [];
   var z = [];
   function search(userId, Array) {
@@ -87,7 +90,7 @@ function BusPage() {
       }
     }
   }
-  var u1 = {};
+
   u = search(user?.uid, accData);
 
   {
@@ -123,9 +126,15 @@ function BusPage() {
   const getQRData = (data) => {
     if (data) {
       if (data.split(",")[2] === new Date().toString().slice(4, 15)) {
-        setQrData(data);
-        setSecondTableState(true);
-        setQrState(null);
+        var x = BookedSeats.includes(data);
+        if (x) {
+          alert("Bookings already done");
+          setQrState(null);
+        } else {
+          setQrData(data);
+          setSecondTableState(true);
+          setQrState(null);
+        }
       } else {
         setQrState(null);
         alert("Invalid QR Code.");
@@ -163,7 +172,6 @@ function BusPage() {
       const PosOfSeats = getPosition(ticket, ",", 4);
       var ticketSeats = ticket.substr(PosOfSeats + 1, ticket.length);
       ticketSeats = ticketSeats.split("---");
-
       ticketSeats.map((ele) =>
         BookSeatArray.push(ele.substr(ele.length - 2, ele.length))
       );
@@ -176,8 +184,43 @@ function BusPage() {
         }
       }
     });
-  }, [Loc, dest]);
+  }, [Loc]);
 
+  const doneForToday = () => {
+    var z = moment().format("H");
+    if (z >= 24) {
+      alert("Button Disabled upto 9 PM");
+    } else {
+      var confirmEmptySeats = window.confirm(
+        "Are you sure you want to close today?"
+      );
+      if (confirmEmptySeats) {
+        dispatch(emptyBookedSeatsBusArray());
+        alert("Bus is now empty.");
+        db.collection("BusData")
+          .doc("111")
+          .collection("Buses")
+          .onSnapshot((snapshot) =>
+            snapshot.docs.map((doc) => {
+              if (doc.id === u.id) {
+                const x = doc.data();
+                const a = Object.keys(x);
+                a.map((ele) => {
+                  if (x[ele] === "filled") {
+                    x[ele] = "empty";
+                  }
+                });
+                db.collection("BusData")
+                  .doc("111")
+                  .collection("Buses")
+                  .doc(u.id)
+                  .set(x);
+              }
+            })
+          );
+      }
+    }
+  };
   return (
     <div className="busPage">
       <div className="busPageLeftSide">
@@ -207,6 +250,11 @@ function BusPage() {
           ) : (
             <h4>Current Location : {Loc}</h4>
           )}
+        </center>
+        <center>
+          <div className="emptyBus">
+            <button onClick={doneForToday}>Done For Today</button>
+          </div>
         </center>
       </div>
       <div className="busPageRightSide">
@@ -267,7 +315,7 @@ function BusPage() {
                 alert(err);
               }}
               onScan={getQRData}
-              style={{ width: "20%", height: "3vh" }}
+              style={{ width: "20%", height: "2.5vh" }}
             />
           </center>
         )}

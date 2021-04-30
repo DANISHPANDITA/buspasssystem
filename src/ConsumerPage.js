@@ -24,7 +24,7 @@ import { db } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-
+import Select from "react-dropdown-select";
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
   const BusPassSeats = useSelector(SelectBusSeatsArray);
@@ -40,8 +40,10 @@ function ConsumerPage() {
   const dispatch = useDispatch();
   const [BusData, setBusData] = useState([]);
   const [accData, setAccData] = useState([]);
+  const [Places, setPlaces] = useState([]);
   var w = [];
   var q = [];
+
   useEffect(() => {
     fetch(
       "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
@@ -224,6 +226,12 @@ function ConsumerPage() {
     dispatch(fareTaker({ fare }));
     history.push(`/bookseat/${user?.uid}`);
   };
+  Data.map((ele) =>
+    Places.push({
+      label: ele.name,
+      value: [ele.lat, ele.lng],
+    })
+  );
 
   if (user) {
     return (
@@ -245,46 +253,51 @@ function ConsumerPage() {
         </div>
         <div className="rightSide">
           <h1 className="headerTitle">Book A Bus-Ticket</h1>
-          <form className="busForm" onSubmit={handleSubmit(onSubmit)}>
-            <label className="busFormTitle" htmlFor="Source">
-              Source Location
-            </label>
-            <input
-              autoFocus
-              className="inputField"
-              id="Source"
-              {...register("Source", { required: true })}
-            />
-            {errors.Source && (
-              <span className="errorMsg" role="alert">
-                Enter Source Location
-              </span>
-            )}
-            <label className="busFormTitle" htmlFor="Destination">
-              Destination Location
-            </label>
-            <input
-              className="inputField"
-              id="Destination"
-              {...register("Destination", { required: true })}
-            />
-            {errors.Destination && (
-              <span className="errorMsg" role="alert">
-                Enter Destination Location
-              </span>
-            )}
-            <label className="busFormTitle" htmlFor="DateOfJourney">
-              Date of Journey
-            </label>
+          {Places.length > 0 && (
+            <form className="busForm" onSubmit={handleSubmit(onSubmit)}>
+              <label className="busFormTitle" htmlFor="Source">
+                Source Location
+              </label>
+              <select {...register("Source", { required: true })}>
+                {Places.map((value) => (
+                  <option key={value.value} value={value.label}>
+                    {value.label}
+                  </option>
+                ))}
+              </select>
 
-            <input
-              type="date"
-              className="inputField"
-              id="DateOfJourney"
-              {...register("DateOfJourney", { required: true })}
-            />
-            <input className="submitButton" type="submit" />
-          </form>
+              {errors.Source && (
+                <span className="errorMsg" role="alert">
+                  Enter Source Location
+                </span>
+              )}
+
+              <label className="busFormTitle" htmlFor="Destination">
+                Destination
+              </label>
+              <select {...register("Destination", { required: true })}>
+                {Places.map((value) => (
+                  <option
+                    key={parseInt(Math.random() * 1000000000)}
+                    value={value.label}
+                  >
+                    {value.label}
+                  </option>
+                ))}
+              </select>
+
+              <label className="busFormTitle" htmlFor="DateOfJourney">
+                Date of Journey
+              </label>
+              <input
+                type="date"
+                className="inputField"
+                id="DateOfJourney"
+                {...register("DateOfJourney", { required: true })}
+              />
+              <input className="submitButton" type="submit" />
+            </form>
+          )}
           {d && fare && (
             <center>
               <table id="customers">
@@ -323,7 +336,6 @@ function ConsumerPage() {
               </button>
             </center>
           )}
-
           {BusPassSeats.length > 0 && (
             <center>
               <table id="customers">
