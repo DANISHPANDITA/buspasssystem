@@ -216,7 +216,7 @@ function ConsumerPage() {
 
   const onSubmit = (data) => {
     var x = moment().format("HH");
-    if (x >= 7 && x <= 21) {
+    if (x >= 9 && x <= 21) {
       var today = new Date();
       var dd = today.getDate();
       var mm = today.getMonth() + 1;
