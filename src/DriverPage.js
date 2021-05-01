@@ -22,6 +22,13 @@ function DriverPage() {
         )
       );
   }, []);
+  function searchByMail(mail, Array) {
+    for (var i = 0; i < Array.length; i++) {
+      if (Array[i].Account.Email === mail) {
+        return Array[i];
+      }
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -64,27 +71,60 @@ function DriverPage() {
   return (
     <div className="driverPage">
       <h1 className="busLoginTitle">Bus Driver Login</h1>
-      <form className="adminLoginForm" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          autoFocus
-          className="busLoginInput"
-          type="email"
-          placeholder="email"
-          name="Email"
-          {...register("Email", { required: true })}
-        />
+      <form className="busLoginForm" onSubmit={handleSubmit(onSubmit)}>
+        <center>
+          {" "}
+          <input
+            autoFocus
+            className="busLoginInput"
+            type="email"
+            placeholder="email"
+            name="Email"
+            {...register("Email", { required: true })}
+          />
+        </center>
         {errors.Email && <span className="busErrorMsg">E-Mail missing</span>}
-        <input
-          placeholder="Password"
-          className=" busLoginInput"
-          name="Password"
-          type="password"
-          {...register("Password", { required: true })}
-        />
+        <center>
+          <input
+            placeholder="Password"
+            className=" busLoginInput"
+            name="Password"
+            type="password"
+            {...register("Password", { required: true })}
+          />
+        </center>
         {errors.Password && (
           <span className="busErrorMsg">Password missing</span>
         )}
-        <input className="busLoginButton" type="submit" />
+        <center>
+          {" "}
+          <input className="busLoginButton" type="submit" />
+        </center>
+        <p
+          onClick={() => {
+            var x = prompt("Enter your E-mail.");
+            var findBYID = searchByMail(x, accData);
+            if (findBYID) {
+              if (findBYID.Account.register === "BusDriver") {
+                auth
+                  .sendPasswordResetEmail(x)
+                  .then(function () {
+                    alert("An E-Mail has been sent to your mail");
+                  })
+                  .catch(function (error) {
+                    alert(error);
+                  });
+                x = "";
+              } else {
+                alert("User isn't registered as a  Bus Driver");
+              }
+            } else {
+              alert("E-Mail not found in database");
+            }
+          }}
+        >
+          Forgot Password?
+        </p>
       </form>
     </div>
   );

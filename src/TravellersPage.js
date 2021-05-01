@@ -85,6 +85,8 @@ function TravellersPage() {
       } else {
         alert("User isn't registered as a consumer");
       }
+    } else {
+      alert("Email not found in the database.");
     }
   };
   return (
