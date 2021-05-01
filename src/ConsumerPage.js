@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 import "./ConsumerPage.css";
 import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
+import firebase from "firebase";
 import {
   removePrevRoute,
   createRoute,
@@ -19,12 +20,13 @@ import {
   SelectPassengers,
   SelectRoute,
 } from "./app/counterSlice";
-import { Avatar } from "@material-ui/core";
-import { db } from "./firebase";
+import { Avatar, IconButton } from "@material-ui/core";
+import { auth, db, storage } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-import Select from "react-dropdown-select";
+import { BlockReserveLoading } from "react-loadingg";
+import { AddToPhotosRounded, Close, MoreHoriz } from "@material-ui/icons";
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
   const BusPassSeats = useSelector(SelectBusSeatsArray);
@@ -37,10 +39,13 @@ function ConsumerPage() {
   const [qrState, setQrState] = useState(false);
   const history = useHistory();
   const user = useSelector(selectUser);
+  const [openMenuState, setOpenMenuState] = useState(false);
   const dispatch = useDispatch();
   const [BusData, setBusData] = useState([]);
+  const [progress, setProgress] = useState("");
   const [accData, setAccData] = useState([]);
   const [Places, setPlaces] = useState([]);
+  const [SetNewImageState, setSetNewImageState] = useState(false);
   var w = [];
   var q = [];
 
@@ -78,6 +83,59 @@ function ConsumerPage() {
   {
     q = q.reduce((a, b) => a.concat(b), []);
   }
+  function buildPhotoSelector() {
+    const fileSelector = document.createElement("input");
+    fileSelector.setAttribute("type", "file");
+    fileSelector.setAttribute("accept", "image/jpg, image/png");
+    return fileSelector;
+  }
+
+  const SelectNewPhoto = (e) => {
+    e.preventDefault();
+    const fileSelector = buildPhotoSelector();
+    fileSelector.click();
+    fileSelector.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+
+      if (file) {
+        const uploadTask = storage.ref(`users/${file.name}`).put(file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            var progress = Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgress(progress);
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED:
+                break;
+              case firebase.storage.TaskState.RUNNING:
+                break;
+              default:
+                console.log("..");
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              auth.currentUser
+                .updateProfile({
+                  photoURL: downloadURL,
+                })
+                .then(function () {
+                  alert("Successfully Updated Profile Picture,Please Refresh");
+                })
+                .catch(function (error) {
+                  alert(error);
+                });
+            });
+          }
+        );
+      }
+    });
+  };
 
   var bb = [];
   //q(Ids of Buses Booked by user) and w(Buses Ids)
@@ -250,17 +308,117 @@ function ConsumerPage() {
               Sign Out
             </button>
           </center>
+          <center>
+            {!openMenuState ? (
+              <div className="falseStateMenu">
+                <IconButton className="MoreOptionsConsumerPage">
+                  <MoreHoriz
+                    className="moreOptionsConsumerPage"
+                    onClick={() => setOpenMenuState(true)}
+                  />
+                </IconButton>
+                <p>More Options</p>
+              </div>
+            ) : (
+              <div className="trueStateMenu">
+                <IconButton className="CloseMoreOptionsConsumerPage">
+                  <Close
+                    className="closeMoreOptionsConsumerPage"
+                    onClick={() => setOpenMenuState(false)}
+                  />{" "}
+                </IconButton>
+                <p
+                  onClick={() => {
+                    var NewLogInName = prompt("Enter New Name");
+                    if (NewLogInName) {
+                      if (NewLogInName === auth.currentUser.displayName) {
+                        alert("Same Name");
+                      } else {
+                        auth.currentUser
+                          .updateProfile({
+                            displayName: NewLogInName,
+                          })
+                          .then(function () {
+                            alert("Name Change Successful , Refresh the Page");
+                          })
+                          .catch(function (error) {
+                            alert(error);
+                          });
+                      }
+                    }
+                  }}
+                >
+                  Update Your Name
+                </p>
+                <p
+                  onClick={() => {
+                    setSetNewImageState(true);
+                  }}
+                >
+                  Update Your Photo
+                </p>
+                <center>
+                  {SetNewImageState && (
+                    <div className="NewPhotoUpload" onClick={SelectNewPhoto}>
+                      <AddToPhotosRounded className="NewPhotoUploadIcon" />
+                      <p>Choose Photo</p>
+                      {progress && <p>{progress}</p>}
+                    </div>
+                  )}
+                </center>
+                <p
+                  onClick={() => {
+                    var newPassword = prompt("Enter your new password");
+                    if (newPassword) {
+                      auth.currentUser
+                        .updatePassword(newPassword)
+                        .then(function () {
+                          alert(
+                            "Successfully Changed Password, Now Login Again"
+                          );
+                          dispatch(logout());
+                          history.push("/");
+                        })
+                        .catch(function (error) {
+                          alert(error);
+                        });
+                    }
+                  }}
+                >
+                  Change Password
+                </p>
+                <p
+                  onClick={() => {
+                    auth()
+                      .currentUser.delete()
+                      .then(function () {
+                        alert("User Deleted. Redirecting to Home Page.");
+                        history.push("/");
+                      })
+                      .catch(function (error) {
+                        alert(error);
+                      });
+                  }}
+                >
+                  Delete Account
+                </p>
+              </div>
+            )}
+          </center>
         </div>
         <div className="rightSide">
           <h1 className="headerTitle">Book A Bus-Ticket</h1>
-          {Places.length > 0 && (
+          {Places.length > 0 ? (
             <form className="busForm" onSubmit={handleSubmit(onSubmit)}>
               <label className="busFormTitle" htmlFor="Source">
                 Source Location
               </label>
               <select {...register("Source", { required: true })}>
                 {Places.map((value) => (
-                  <option key={value.value} value={value.label}>
+                  <option
+                    key={value.value[0] * Math.random() * 10000000000}
+                    value={value.label}
+                  >
                     {value.label}
                   </option>
                 ))}
@@ -297,6 +455,8 @@ function ConsumerPage() {
               />
               <input className="submitButton" type="submit" />
             </form>
+          ) : (
+            <BlockReserveLoading style={{ width: "100%" }} size="large" />
           )}
           {d && fare && (
             <center>

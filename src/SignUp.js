@@ -73,6 +73,7 @@ function SignUp() {
                       .collection("Account")
                       .add({
                         id: user.uid,
+                        Email: data.Email,
                         Name: data.Name,
                         Aadhaar: data.Aadhaar,
                         Gender: data.Gender,

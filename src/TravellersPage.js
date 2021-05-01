@@ -5,9 +5,10 @@ import { auth, db } from "./firebase";
 import { useDispatch } from "react-redux";
 import { login } from "./app/counterSlice";
 import { useHistory } from "react-router";
+
 function TravellersPage() {
   const history = useHistory();
-  const [accData, setAccData] = useState([]);
+  var [accData, setAccData] = useState([]);
   useEffect(() => {
     db.collection("BusData")
       .doc("111")
@@ -22,7 +23,14 @@ function TravellersPage() {
       );
   }, []);
 
-  function search(userId, Array) {
+  function searchByMail(mail, Array) {
+    for (var i = 0; i < Array.length; i++) {
+      if (Array[i].Account.Email === mail) {
+        return Array[i];
+      }
+    }
+  }
+  function searchById(userId, Array) {
     for (var i = 0; i < Array.length; i++) {
       if (Array[i].Account.id === userId) {
         return Array[i];
@@ -41,7 +49,7 @@ function TravellersPage() {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        var u = search(user.uid, accData);
+        var u = searchById(user.uid, accData);
         if (u.Account.register === "Consumer") {
           dispatch(
             login({
@@ -60,33 +68,59 @@ function TravellersPage() {
         alert(error);
       });
   };
-
+  const forgetPassword = () => {
+    var x = prompt("Enter your E-mail.");
+    var findBYID = searchByMail(x, accData);
+    if (findBYID) {
+      if (findBYID.Account.register === "Consumer") {
+        auth
+          .sendPasswordResetEmail(x)
+          .then(function () {
+            alert("An E-Mail has been sent to your mail");
+          })
+          .catch(function (error) {
+            alert(error);
+          });
+        x = "";
+      } else {
+        alert("User isn't registered as a consumer");
+      }
+    }
+  };
   return (
     <div className="travellerPage">
       <h1 className="travellerLoginTitle">Consumer Account Login</h1>
       <form className="travellerLoginForm" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          autoFocus
-          className="travellerLoginInput"
-          type="email"
-          placeholder="email"
-          name="Email"
-          {...register("Email", { required: true })}
-        />
+        <center>
+          <input
+            autoFocus
+            className="travellerLoginInput"
+            type="email"
+            placeholder="email"
+            name="Email"
+            {...register("Email", { required: true })}
+          />
+        </center>
         {errors.Email && (
           <span className="travellerErrorMsg">E-Mail missing</span>
         )}
-        <input
-          placeholder="Password"
-          className=" travellerLoginInput"
-          name="Password"
-          type="password"
-          {...register("Password", { required: true })}
-        />
+        <center>
+          <input
+            placeholder="Password"
+            className=" travellerLoginInput"
+            name="Password"
+            type="password"
+            {...register("Password", { required: true })}
+          />
+        </center>
         {errors.Password && (
           <span className="travellerErrorMsg">Password missing</span>
         )}
-        <input className="travellerLoginButton" type="submit" />
+        <center>
+          {" "}
+          <input className="travellerLoginButton" type="submit" />
+        </center>
+        <p onClick={forgetPassword}>Forgot Password?</p>
       </form>
     </div>
   );

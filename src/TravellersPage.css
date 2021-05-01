@@ -12,6 +12,7 @@
 .travellerLoginTitle {
   text-align: center;
   color: rgb(8, 88, 22);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 3.52em;
   font-style: italic;
 }
@@ -20,39 +21,86 @@
   display: flex;
   flex-direction: column;
   margin-left: auto;
+  height: 35vh;
+  border: 2px solid black;
+  border-radius: 0.7vw;
+  background-color: rgb(255, 255, 255);
   margin-right: auto;
   width: 30%;
 }
 .travellerErrorMsg {
-  margin-top: 0.7vh;
+  margin-top: 0.3vh;
   text-align: center;
-  width: 70%;
+  width: 50%;
+  border-radius: 0.7vw;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   background-color: rgb(120, 248, 103);
   color: red;
+  font-weight: 500;
+  font-size: 0.7em;
 }
 .travellerLoginInput {
-  margin-top: 0.9vh;
-  height: 3vh;
-  font-size: 1em;
-  color: rgb(108, 114, 119);
-  border-radius: 0.7vw;
+  margin-top: 5vh;
+  width: 80%;
+  height: 3.7vh;
+  font-size: 1.2em;
+  font-family: serif;
+  background-color: rgb(221, 221, 221);
+  font-weight: 600;
+  border-radius: 0.4vw;
   border: none;
   outline: none;
-  padding: 0.5vw;
+  padding: 0.3vw 0.3vw 0.3vw 2vw;
 }
 .travellerLoginButton {
-  margin-top: 0.5vh;
+  margin-top: 4vh;
   font-size: 1.2em;
-  background-color: rgb(20, 187, 179);
+  background: linear-gradient(
+    90deg,
+    rgba(62, 111, 121, 1) 0%,
+    rgb(2, 146, 172) 25%,
+    rgb(2, 146, 172) 75%,
+    rgba(62, 111, 121, 1) 100%
+  );
   font-family: fantasy;
-  border-radius: 0.8vw;
+  border-radius: 0.4vw;
+  width: 70%;
+  height: 4vh;
   border: 1px solid rgb(21, 170, 138);
   outline: none;
 }
 .travellerLoginButton:hover {
-  background-color: rgb(243, 225, 146);
+  background: linear-gradient(
+    90deg,
+    rgba(218, 217, 232, 1) 0%,
+    rgba(99, 184, 200, 1) 25%,
+    rgba(99, 184, 200, 1) 75%,
+    rgba(218, 217, 232, 1) 100%
+  );
   cursor: pointer;
+}
+.travellerLoginForm p {
+  font-size: 1.8vh;
+  padding-left: 0.9vw;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: rgb(10, 46, 46);
+  text-decoration: underline;
+}
+.travellerLoginForm p:hover {
+  cursor: pointer;
+  color: rgb(35, 145, 145);
+}
+@media screen and (max-width: 530px) {
+  .travellerLoginForm {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 360px) {
+  .travellerLoginForm {
+    width: 70%;
+  }
 }

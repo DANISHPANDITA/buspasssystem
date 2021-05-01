@@ -33,8 +33,7 @@
 .signOutButton {
   background-color: rgb(167, 14, 255);
   width: 85%;
-  font-size: 1.4em;
-  height: 4.2vh;
+  height: 3vh;
   font-family: fantasy;
   margin-top: 2vh;
 }
@@ -154,4 +153,47 @@
 .bookTicket:hover {
   cursor: pointer;
   background-color: rgb(133, 188, 224);
+}
+.MoreOptionsConsumerPage {
+  height: 4vh !important;
+  width: 4vh !important;
+}
+.moreOptionsConsumerPage {
+  height: 4vh !important;
+  width: 4vh !important;
+}
+.falseStateMenu p {
+  font-size: 0.9em;
+  font-family: cursive;
+}
+.CloseMoreOptionsConsumerPage {
+  height: 3vh !important;
+  width: 3vh !important;
+}
+.closeMoreOptionsConsumerPage {
+  height: 3vh !important;
+  width: 3vh !important;
+}
+.trueStateMenu p {
+  font-size: 0.9em;
+  font-family: cursive;
+  margin-top: 0.7vh;
+}
+.trueStateMenu p:hover {
+  color: #1f6475;
+  cursor: pointer;
+}
+.NewPhotoUpload {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 0.7vh;
+}
+.NewPhotoUploadIcon {
+  height: 2vh !important;
+  width: 2vh !important;
+}
+.NewPhotoUpload p {
+  font-size: 0.9em;
+  font-family: cursive;
 }
