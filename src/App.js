@@ -12,6 +12,7 @@ import { login, logout, selectUser } from "./app/counterSlice";
 import { auth, db } from "./firebase";
 import BusPage from "./BusPage";
 import BOOKTICKET from "./BOOKTICKET";
+import AdminPage from "./AdminPage";
 
 function App() {
   const user = useSelector(selectUser);
@@ -70,7 +71,7 @@ function App() {
           ) : u?.Account.register === "BusDriver" ? (
             <Route exact path={`/driver/${user.uid}`} component={BusPage} />
           ) : (
-            <Route exact path={`/admin/${user?.uid}`} component={Admin} />
+            <Route exact path={`/admin/${user?.uid}`} component={AdminPage} />
           )}
 
           <Route exact path={`/bookseat/${user?.uid}`} component={BOOKTICKET} />

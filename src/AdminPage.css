@@ -1,0 +1,140 @@
+.AdminPage {
+  background-image: linear-gradient(
+    to right top,
+    #cccaca,
+    #d1cfcf,
+    #d6d3d3,
+    #dbd8d8,
+    #e0dddd,
+    #e4e1e2,
+    #e9e6e6,
+    #edeaeb,
+    #f1eff0,
+    #f6f5f5,
+    #fafafa,
+    #ffffff
+  );
+}
+.adminProfilePic {
+  width: 30vh;
+  height: 30vh;
+  border-radius: 50%;
+  margin-top: -15vh;
+  object-fit: cover;
+}
+.backgroundProfilePicture {
+  height: 20vh;
+  width: 100%;
+  background-image: linear-gradient(
+    to right top,
+    #daa2c1,
+    #d2a4cb,
+    #c8a8d4,
+    #bcabdb,
+    #aeafe0,
+    #9fb4e6,
+    #8fb9ea,
+    #7ebeeb,
+    #65c5ec,
+    #4ecce7,
+    #40d2dc,
+    #45d7cd
+  );
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid rgb(71, 69, 69);
+  margin-top: 3vh;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 4px 8px 4px 8px;
+  font-family: "Times New Roman";
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.adminDetails p {
+  color: rgb(6, 89, 92);
+  font-size: 1.2em;
+  font-weight: 600;
+  color: rgba(13, 111, 135, 1);
+  text-shadow: -4px 8px 15px rgba(0, 0, 0, 1);
+  font-family: "Rockwell";
+  font-style: italic;
+}
+@media screen and (max-width: 750px) {
+  .adminProfilePic {
+    width: 15vh;
+    height: 15vh;
+    border-radius: 50%;
+    margin-top: -7vh;
+  }
+  .backgroundProfilePicture {
+    height: 15vh;
+  }
+  .usersRegHead {
+    font-size: 3.5vw;
+  }
+}
+#myInput {
+  margin-top: 3vh;
+  width: 45vw;
+  height: 3.3vh;
+  padding-left: 4vw;
+  outline: none;
+  border: none;
+  border-radius: 2vw;
+  font-family: cursive;
+  background-image: linear-gradient(
+    to right bottom,
+    #f0edf0,
+    #f0e7f0,
+    #f0e1ef,
+    #f0dbee,
+    #f0d5ed,
+    #f1d2ed,
+    #f3cfed,
+    #f4cced,
+    #f7cbef,
+    #f9caf1,
+    #fcc9f2,
+    #ffc8f4
+  );
+}
+#myUserInput {
+  margin-top: 3vh;
+  width: 45vw;
+  height: 3.3vh;
+  padding-left: 4vw;
+  outline: none;
+  border: none;
+  border-radius: 2vw;
+  font-family: cursive;
+  background-image: linear-gradient(
+    to right bottom,
+    #f0edf0,
+    #f0e7f0,
+    #f0e1ef,
+    #f0dbee,
+    #f0d5ed,
+    #f1d2ed,
+    #f3cfed,
+    #f4cced,
+    #f7cbef,
+    #f9caf1,
+    #fcc9f2,
+    #ffc8f4
+  );
+}
+.usersRegHead {
+  margin-top: 5vh;
+  font-family: cursive;
+  font-weight: 700;
+  font-size: 1.9vw;
+}

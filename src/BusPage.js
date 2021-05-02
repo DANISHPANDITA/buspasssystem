@@ -1,10 +1,10 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar, IconButton } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { logout, selectUser } from "./app/counterSlice";
 import "./BusPage.css";
-import { auth, db } from "./firebase";
+import { auth, db, storage } from "./firebase";
 import QrReader from "react-qr-reader";
 import { Tooltip } from "@material-ui/core";
 import _ from "lodash";
@@ -14,7 +14,13 @@ import {
   emptyBookedSeatsBusArray,
   SelectBookedSeatsArray,
 } from "./app/driverSlice";
-
+import {
+  AddToPhotosRounded,
+  Close,
+  CreateRounded,
+  MoreHorizRounded,
+} from "@material-ui/icons";
+import firebase from "firebase";
 function BusPage() {
   const user = useSelector(selectUser);
   const [accData, setAccData] = useState([]);
@@ -31,6 +37,9 @@ function BusPage() {
   const [dest, setDest] = useState("");
   const history = useHistory();
   var [u, setU] = useState([]);
+  const [SetNewImageState, setSetNewImageState] = useState(false);
+  const [openMenuState, setOpenMenuState] = useState(false);
+  const [progress, setProgress] = useState("");
   useEffect(() => {
     fetch(
       "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
@@ -221,6 +230,60 @@ function BusPage() {
       }
     }
   };
+  function buildPhotoSelector() {
+    const fileSelector = document.createElement("input");
+    fileSelector.setAttribute("type", "file");
+    fileSelector.setAttribute("accept", "image/jpg, image/png");
+    return fileSelector;
+  }
+
+  const SelectNewPhoto = (e) => {
+    e.preventDefault();
+    const fileSelector = buildPhotoSelector();
+    fileSelector.click();
+    fileSelector.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+
+      if (file) {
+        const uploadTask = storage.ref(`users/${file.name}`).put(file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            var progress = Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgress(progress);
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED:
+                break;
+              case firebase.storage.TaskState.RUNNING:
+                break;
+              default:
+                console.log("..");
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              auth.currentUser
+                .updateProfile({
+                  photoURL: downloadURL,
+                })
+                .then(function () {
+                  alert("Successfully Updated Profile Picture,Please Refresh");
+                })
+                .catch(function (error) {
+                  alert(error);
+                });
+            });
+          }
+        );
+      }
+    });
+  };
+
   return (
     <div className="busPage">
       <div className="busPageLeftSide">
@@ -228,9 +291,18 @@ function BusPage() {
           <Avatar className="busDriverPhoto" src={user?.AvatarPhoto} alt="" />
         </center>
         <div className="busDetails">
-          <h2 className="busDriverName">{u?.Account.Name}</h2>
+          <h2 className="busDriverName">{u?.Account.name}</h2>
           <h3 className="busDriverDet">{user?.email}</h3>
           <h3 className="busDriverDet">{u?.Account.Phone}</h3>
+          <h3 className="busDriverDet">
+            Route : {u?.Account.route}{" "}
+            <CreateRounded
+              className="changeRoute"
+              onClick={() => {
+                alert("Contact Admin to change route");
+              }}
+            />{" "}
+          </h3>
         </div>
         <center>
           <button className="signOutButton" onClick={handleSignOut}>
@@ -240,15 +312,112 @@ function BusPage() {
         <center>
           {BusLocation.length > 0 ? (
             <div className="locationUpdate">
-              <h4>Last Updated at : {UpdateTime}</h4>
+              <h4 className="LocationUpdate">Last Updated at : {UpdateTime}</h4>
             </div>
           ) : (
-            <h2>Location Not Available</h2>
+            <h2 className="LocationUpdate">Location Not Available</h2>
           )}
           {Loc.length === 0 ? (
-            <h4>Can't find the location at the moment. Try after some time.</h4>
+            <h4 className="LocationUpdate">
+              Can't find the location at the moment. Try after some time.
+            </h4>
           ) : (
-            <h4>Current Location : {Loc}</h4>
+            <h4 className="LocationUpdate">Current Location : {Loc}</h4>
+          )}
+        </center>
+        <center>
+          {!openMenuState ? (
+            <div className="falseStateMenu">
+              <IconButton className="MoreOptionsConsumerPage">
+                <MoreHorizRounded
+                  className="moreOptionsConsumerPage"
+                  onClick={() => setOpenMenuState(true)}
+                />
+              </IconButton>
+              <p>More Options</p>
+            </div>
+          ) : (
+            <div className="trueStateMenu">
+              <IconButton className="CloseMoreOptionsConsumerPage">
+                <Close
+                  className="closeMoreOptionsConsumerPage"
+                  onClick={() => setOpenMenuState(false)}
+                />{" "}
+              </IconButton>
+              <p
+                onClick={() => {
+                  var NewLogInName = prompt("Enter New Name");
+                  if (NewLogInName) {
+                    if (NewLogInName === auth.currentUser.displayName) {
+                      alert("Same Name");
+                    } else {
+                      auth.currentUser
+                        .updateProfile({
+                          displayName: NewLogInName,
+                        })
+                        .then(function () {
+                          alert("Name Change Successful , Refresh the Page");
+                        })
+                        .catch(function (error) {
+                          alert(error);
+                        });
+                    }
+                  }
+                }}
+              >
+                Update Your Name
+              </p>
+              <p
+                onClick={() => {
+                  setSetNewImageState(true);
+                }}
+              >
+                Update Your Photo
+              </p>
+              <center>
+                {SetNewImageState && (
+                  <div className="NewPhotoUpload" onClick={SelectNewPhoto}>
+                    <AddToPhotosRounded className="NewPhotoUploadIcon" />
+                    <p>Choose Photo</p>
+                    {progress && <p>{progress}</p>}
+                  </div>
+                )}
+              </center>
+              <p
+                onClick={() => {
+                  var newPassword = prompt("Enter your new password");
+                  if (newPassword) {
+                    auth.currentUser
+                      .updatePassword(newPassword)
+                      .then(function () {
+                        alert("Successfully Changed Password, Now Login Again");
+                        dispatch(logout());
+                        history.push("/");
+                      })
+                      .catch(function (error) {
+                        alert(error);
+                      });
+                  }
+                }}
+              >
+                Change Password
+              </p>
+              <p
+                onClick={() => {
+                  auth()
+                    .currentUser.delete()
+                    .then(function () {
+                      alert("User Deleted. Redirecting to Home Page.");
+                      history.push("/");
+                    })
+                    .catch(function (error) {
+                      alert(error);
+                    });
+                }}
+              >
+                Delete Account
+              </p>
+            </div>
           )}
         </center>
         <center>

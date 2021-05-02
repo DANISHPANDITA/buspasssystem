@@ -27,6 +27,7 @@ import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
 import { BlockReserveLoading } from "react-loadingg";
 import { AddToPhotosRounded, Close, MoreHoriz } from "@material-ui/icons";
+import CircleToBlockLoading from "react-loadingg/lib/CircleToBlockLoading";
 function ConsumerPage() {
   const [tableData, setTableData] = useState({});
   const BusPassSeats = useSelector(SelectBusSeatsArray);
@@ -39,13 +40,15 @@ function ConsumerPage() {
   const [qrState, setQrState] = useState(false);
   const history = useHistory();
   const user = useSelector(selectUser);
+  const [SetNewImageState, setSetNewImageState] = useState(false);
   const [openMenuState, setOpenMenuState] = useState(false);
+  const [progress, setProgress] = useState("");
   const dispatch = useDispatch();
   const [BusData, setBusData] = useState([]);
-  const [progress, setProgress] = useState("");
+
   const [accData, setAccData] = useState([]);
   const [Places, setPlaces] = useState([]);
-  const [SetNewImageState, setSetNewImageState] = useState(false);
+
   var w = [];
   var q = [];
 
@@ -215,6 +218,7 @@ function ConsumerPage() {
   }
 
   const onSubmit = (data) => {
+    alert("If page gets stuck.wait");
     var x = moment().format("HH");
     if (x >= 9 && x <= 21) {
       var today = new Date();
@@ -415,10 +419,7 @@ function ConsumerPage() {
               </label>
               <select {...register("Source", { required: true })}>
                 {Places.map((value) => (
-                  <option
-                    key={value.value[0] * Math.random() * 10000000000}
-                    value={value.label}
-                  >
+                  <option key={Math.random() * 10000000000} value={value.label}>
                     {value.label}
                   </option>
                 ))}
@@ -436,7 +437,7 @@ function ConsumerPage() {
               <select {...register("Destination", { required: true })}>
                 {Places.map((value) => (
                   <option
-                    key={parseInt(Math.random() * 1000000000)}
+                    key={Math.random() * 100000000000}
                     value={value.label}
                   >
                     {value.label}
