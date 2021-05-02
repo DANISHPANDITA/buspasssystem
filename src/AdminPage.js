@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./AdminPage.css";
-import { selectUser } from "./app/counterSlice";
-import { db } from "./firebase";
+import { logout, selectUser } from "./app/counterSlice";
+import { auth, db, storage } from "./firebase";
 import { WindMillLoading } from "react-loadingg";
 import { useHistory } from "react-router";
-
+import { IconButton, Tooltip } from "@material-ui/core";
+import {
+  CreateRounded,
+  FaceRounded,
+  PersonRounded,
+  VpnKeyRounded,
+} from "@material-ui/icons";
+import firebase from "firebase";
 function AdminPage() {
   const user = useSelector(selectUser);
   const [Accounts, setAccounts] = useState([]);
@@ -13,6 +20,8 @@ function AdminPage() {
   var [BusTableData, setBusTableData] = useState([]);
   var [AccTableData, setAccTableData] = useState([]);
   const history = useHistory();
+  const [progress, setProgress] = useState("");
+  const dispatch = useDispatch();
   useEffect(() => {
     db.collection("BusData")
       .doc("111")
@@ -131,16 +140,126 @@ function AdminPage() {
       }
     }
   }
+  function buildPhotoSelector() {
+    const fileSelector = document.createElement("input");
+    fileSelector.setAttribute("type", "file");
+    fileSelector.setAttribute("accept", "image/jpg, image/png");
+    return fileSelector;
+  }
+  const changePhoto = (e) => {
+    e.preventDefault();
+    const fileSelector = buildPhotoSelector();
+    fileSelector.click();
+    fileSelector.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+
+      if (file) {
+        const uploadTask = storage.ref(`users/${file.name}`).put(file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            var progress = Math.floor(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setProgress(progress);
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED:
+                break;
+              case firebase.storage.TaskState.RUNNING:
+                break;
+              default:
+                console.log("..");
+            }
+          },
+          (error) => {
+            console.log(error);
+          },
+          () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              auth.currentUser
+                .updateProfile({
+                  photoURL: downloadURL,
+                })
+                .then(function () {
+                  alert("Successfully Updated Profile Picture,Please Refresh");
+                })
+                .catch(function (error) {
+                  alert(error);
+                });
+            });
+          }
+        );
+      }
+    });
+  };
   return (
     <div className="AdminPage">
-      <div className="backgroundProfilePicture"></div>
+      <div className="backgroundProfilePicture">
+        <div className="extraButtons">
+          <Tooltip title="Sign Out" placement="right-start">
+            <IconButton
+              className="extraButton"
+              onClick={() => {
+                auth.signOut();
+                dispatch(logout());
+                alert("Redirecting to Home Page...");
+                history.push("/");
+              }}
+            >
+              {" "}
+              <PersonRounded className="ExtraButton" />{" "}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Change Profile Pic" placement="right-start">
+            <IconButton onClick={changePhoto} className="extraButton">
+              {" "}
+              <FaceRounded className="ExtraButton" />
+              {progress && (
+                <p>
+                  <small> {progress}</small>
+                </p>
+              )}
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="ChangePassword" placement="right-start">
+            <IconButton className="extraButton">
+              {" "}
+              <VpnKeyRounded className="ExtraButton" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </div>
       <center>
         {" "}
         <img className="adminProfilePic" src={user.AvatarPhoto} alt="" />
       </center>
       <center>
         <div className="adminDetails">
-          <p>{user.Name}</p>
+          <p>
+            {user.Name}
+            <Tooltip title="Rename Admin" placement="right-start">
+              <IconButton
+                className="EditButton"
+                onClick={() => {
+                  var x = prompt("Enter New Name");
+                  if (x && x.length > 0) {
+                    if (x === user.Name) {
+                      alert("New name cannot be same as old name.");
+                    } else {
+                      auth.currentUser.updateProfile({
+                        displayName: x,
+                      });
+                      alert("Name Updated. Refresh to see Change");
+                    }
+                  } else {
+                    alert("Nothing Entered");
+                  }
+                }}
+              >
+                <CreateRounded className="editButton" />
+              </IconButton>
+            </Tooltip>
+          </p>
           <p>{user.email}</p>
         </div>
         {uniqueArray.length > 0 ? (

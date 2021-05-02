@@ -5,7 +5,8 @@ import { auth, db } from "./firebase";
 import { useDispatch } from "react-redux";
 import { login } from "./app/counterSlice";
 import { useHistory } from "react-router";
-
+import Jump from "react-reveal/Jump";
+import Pulse from "react-reveal/Pulse";
 function TravellersPage() {
   const history = useHistory();
   var [accData, setAccData] = useState([]);
@@ -91,39 +92,43 @@ function TravellersPage() {
   };
   return (
     <div className="travellerPage">
-      <h1 className="travellerLoginTitle">Consumer Account Login</h1>
-      <form className="travellerLoginForm" onSubmit={handleSubmit(onSubmit)}>
-        <center>
-          <input
-            autoFocus
-            className="travellerLoginInput"
-            type="email"
-            placeholder="email"
-            name="Email"
-            {...register("Email", { required: true })}
-          />
-        </center>
-        {errors.Email && (
-          <span className="travellerErrorMsg">E-Mail missing</span>
-        )}
-        <center>
-          <input
-            placeholder="Password"
-            className=" travellerLoginInput"
-            name="Password"
-            type="password"
-            {...register("Password", { required: true })}
-          />
-        </center>
-        {errors.Password && (
-          <span className="travellerErrorMsg">Password missing</span>
-        )}
-        <center>
-          {" "}
-          <input className="travellerLoginButton" type="submit" />
-        </center>
-        <p onClick={forgetPassword}>Forgot Password?</p>
-      </form>
+      <Jump>
+        <h1 className="travellerLoginTitle">Consumer Account Login</h1>
+      </Jump>
+      <Pulse>
+        <form className="travellerLoginForm" onSubmit={handleSubmit(onSubmit)}>
+          <center>
+            <input
+              autoFocus
+              className="travellerLoginInput"
+              type="email"
+              placeholder="email"
+              name="Email"
+              {...register("Email", { required: true })}
+            />
+          </center>
+          {errors.Email && (
+            <span className="travellerErrorMsg">E-Mail missing</span>
+          )}
+          <center>
+            <input
+              placeholder="Password"
+              className=" travellerLoginInput"
+              name="Password"
+              type="password"
+              {...register("Password", { required: true })}
+            />
+          </center>
+          {errors.Password && (
+            <span className="travellerErrorMsg">Password missing</span>
+          )}
+          <center>
+            {" "}
+            <input className="travellerLoginButton" type="submit" />
+          </center>
+          <p onClick={forgetPassword}>Forgot Password?</p>
+        </form>
+      </Pulse>
     </div>
   );
 }

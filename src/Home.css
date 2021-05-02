@@ -10,7 +10,9 @@
 }
 .Home {
   height: 100vh;
-  background-image: url("https://wallpaperaccess.com/full/1628632.jpg");
+  background-image: url("./img/homepage.jpg");
+  background-color: rgba(155, 152, 152, 0.459);
+  background-blend-mode: lighten;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -24,7 +24,21 @@
   height: 35vh;
   border: 2px solid black;
   border-radius: 0.7vw;
-  background-color: rgb(255, 255, 255);
+  background-image: radial-gradient(
+    circle,
+    #cb5454,
+    #d97473,
+    #e49391,
+    #eeb1b1,
+    #f5d0d0,
+    #f5d1d1,
+    #f4d1d1,
+    #f4d2d2,
+    #ecb4b4,
+    #e29695,
+    #d77877,
+    #c95a5a
+  );
   margin-right: auto;
   width: 30%;
 }

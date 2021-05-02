@@ -40,6 +40,8 @@ function BusPage() {
   const [SetNewImageState, setSetNewImageState] = useState(false);
   const [openMenuState, setOpenMenuState] = useState(false);
   const [progress, setProgress] = useState("");
+  var [BusFinalDest, setBusFinalDest] = useState("");
+  var [BusInitDest, setBusInitDest] = useState("");
   useEffect(() => {
     fetch(
       "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
@@ -159,6 +161,14 @@ function BusPage() {
   }
   const Pos = getPosition(qrDataArray[0], ",", 4);
   var c = [];
+  if (u) {
+    const BusFinalDestL = getPosition(u.Account.route, "-", 1);
+    BusInitDest = u.Account.route.slice(0, BusFinalDestL);
+    BusFinalDest = u.Account.route.slice(
+      BusFinalDestL + 1,
+      u.Account.route.length
+    );
+  }
   c.push(qrDataArray[0].slice(Pos + 1, qrDataArray[0].length));
   if (qrDataArray.length > 1) {
     for (var i = 1; i < qrDataArray.length; i++) {
@@ -194,6 +204,17 @@ function BusPage() {
       }
     });
   }, [Loc]);
+  useEffect(() => {
+    if (Loc && u) {
+      if (Loc === BusFinalDest) {
+        db.collection("BusData")
+          .doc("111")
+          .collection("Buses")
+          .doc(u.id)
+          .update({ route: `${BusInitDest}-${BusFinalDest}` });
+      }
+    }
+  }, []);
 
   const doneForToday = () => {
     var z = moment().format("H");

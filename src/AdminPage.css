@@ -138,3 +138,42 @@ tr:nth-child(even) {
   font-weight: 700;
   font-size: 1.9vw;
 }
+.EditButton {
+  position: absolute;
+  margin-top: -2vh;
+  padding: 0;
+  height: 2vw !important;
+  width: 2vw !important;
+}
+.extraButtons {
+  width: 3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.editButton {
+  height: 1vw !important;
+  width: 1vw !important;
+}
+@media screen and (max-width: 900px) {
+  .usersRegHead {
+    font-size: 3vw;
+  }
+}
+@media screen and (max-width: 500px) {
+  .usersRegHead {
+    font-size: 5vw;
+  }
+}
+@media screen and (max-width: 340px) {
+  .extraButton {
+    height: 1.5vw !important;
+    width: 1.5vw !important;
+  }
+}
+@media screen and (min-width: 341px) and (max-width: 750px) {
+  .extraButton {
+    height: 2.5vw !important;
+    width: 2.5vw !important;
+  }
+}
