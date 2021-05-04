@@ -54,7 +54,7 @@ function ConsumerPage() {
 
   useEffect(() => {
     fetch(
-      "https://firebasestorage.googleapis.com/v0/b/busapp-aabdc.appspot.com/o/india.json?alt=media&token=60c027af-d9a2-48ba-bd30-855e8c0a06ed"
+      "https://run.mocky.io/v3/b5042b2c-e97c-4f42-979d-9a9bf5a49e80"
     )
       .then((res) => res.json())
       .then((data) => setData(data));
